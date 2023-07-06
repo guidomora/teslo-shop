@@ -1,0 +1,29 @@
+1) fuimos creando todo el diseño de la pagina
+
+2) Componente para mostrar productos:
+    - interfaces > products.ts aca vamos a crear la interface de los productos que basicamente
+      la sacamos del modelo que esta en database > products solo que cambiamos el nombre
+      y a validsizes y validtypes les cambiamos el nombre
+    - components > products > ProductCard.tsx en este componente vamos a renderizar
+      las cards de los productos, recibimos el producto y lo mapeamos
+    - components > products > ProductList.tsx este componentes es la lista de los
+      productos, mapeamostodos los productos y luego se los pasamos a ProductCard
+      que va a recibir el producto individual
+    - pages > index importamos ProductList y le pasamos initialData.products que 
+      es lo que tiene todos los productos
+
+3) Creamos el componente que va a renderizar cada articulo al hacer click en la
+   card
+----------------IMPORTANTE--------------------
+Como usar una dependencia que no esta hecha para TS y ni si quiera tiene los archivos
+de definicion (no lo tuve que hacer pero dejo las explicacion, por si en el
+futuro lo tengo que hacer)
+
+4)  - En npm tiene un apartado que noes explica como hacerlo
+    - Vamos a tener que crear un archivo en la carpeta raiz
+      con el nombre que nos da en la pagina
+    - Luego ene se archivo vamos a pegar todas las lineas de codigo que
+      tambien nos dan en la pagina, esto le da un aproximado a TS de como
+      funciona la dependencia
+
+----------------IMPORTANTE--------------------
