@@ -7,6 +7,7 @@ interface Props {
     images:string[]
 }
 
+// Solo slider
 
 const ProductSlideShow:FC<Props> = ({images}) => {
   return (
@@ -23,7 +24,6 @@ const ProductSlideShow:FC<Props> = ({images}) => {
                         backgroundImage:`url(${url})`,
                         backgroundSize: "cover"
                     }}>
-
                     </div>
                 </div>
             )

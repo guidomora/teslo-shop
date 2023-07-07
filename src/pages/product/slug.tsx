@@ -4,6 +4,8 @@ import { initialData } from '../../../database/products'
 import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import ProductSlideShow from '@/Components/products/ProductSlideShow'
 import 'react-slideshow-image/dist/styles.css'
+import ItemCounter from '@/Components/ui/ItemCounter'
+import SizeSelector from '@/Components/products/SizeSelector'
 const product = initialData.products[0]
 
 
@@ -20,7 +22,11 @@ const slug = () => {
             <Typography variant='subtitle1' component="h2">${product.price}</Typography>
             <Box sx={{my:2}}>
               <Typography variant='subtitle2'>Cantidad</Typography>
-              {/* contador */}
+              <ItemCounter />
+              <SizeSelector
+               sizes={product.sizes} 
+              //  selectedSize={product.sizes[0]} 
+               />
             </Box>
             <Button color='secondary' className='circular-btn'>Agregar al carrito</Button>
             {/* <Chip label="No hay disponibles" color='error' variant="outlined" /> */}
