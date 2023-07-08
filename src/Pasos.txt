@@ -47,3 +47,16 @@ Database y Restful:
   - database > db.ts copiamos y pegamos el mismo codigo de openjira
   - api > seed.ts el codigo es similar solo que hay que adaptarlo
   - finalmente al hacer el llamado a /api/seed se llena la db de productos
+
+8) Obtener todos los productos:
+  - api > products.ts > index.ts 
+  - creamos un resful api para que cuando hagamos una peticion
+  get nos traiga todos los productos
+
+9) Aplicar filtros a la consulta:
+  - a este mismo rsful api le agregamos la funcion para que segun lo que se escriba
+    en la query, nos devuelva dstintos resultados
+  - lo que hacemos es definir que la req.query va a ser siempre = a que traiga todos
+    los productos 
+  - luego creamos un condicional en el que si la query es diferente de "all" 
+    traiga lo que se escribio en la query y eso se busque en la lista de productos
