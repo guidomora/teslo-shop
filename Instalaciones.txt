@@ -3,3 +3,4 @@ npm install @fontsource/roboto
 npm install @mui/icons-material
 npm install react-slideshow-image -S
 npm install @mui/x-data-grid
+npm install mongoose 

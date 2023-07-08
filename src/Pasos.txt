@@ -27,3 +27,23 @@ futuro lo tengo que hacer)
       funciona la dependencia
 
 ----------------IMPORTANTE--------------------
+
+Database y Restful:
+
+5) Prepara la db local
+  - pasos identicos a los que hicimos en el proyecto de openjira
+  - creamos el archivo docker-compose.yaml, creamos las lineas de codigo
+  - creamos los archivos .env y .env.template y les pasamos la mongourl
+  - al archivo readme le agregamos las indicaciones
+  - ejecutamos docker-compose up -d (hay que tener docker abierto)
+  - en el gitignore escribimos las carpeta "mongo" que se nos creo y .env 
+
+6) Mongoose y modelo de producto:
+  - instalamos mongoose
+  - models > Product.ts en este archivo vamos a crear un modelo del producto
+    es como una interface pero mucho mas detallada
+  
+7) llenar la db y conexion a mongo
+  - database > db.ts copiamos y pegamos el mismo codigo de openjira
+  - api > seed.ts el codigo es similar solo que hay que adaptarlo
+  - finalmente al hacer el llamado a /api/seed se llena la db de productos
