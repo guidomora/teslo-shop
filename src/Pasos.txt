@@ -54,9 +54,22 @@ Database y Restful:
   get nos traiga todos los productos
 
 9) Aplicar filtros a la consulta:
-  - a este mismo rsful api le agregamos la funcion para que segun lo que se escriba
+  - a este mismo restful api le agregamos la funcion para que segun lo que se escriba
     en la query, nos devuelva dstintos resultados
   - lo que hacemos es definir que la req.query va a ser siempre = a que traiga todos
     los productos 
   - luego creamos un condicional en el que si la query es diferente de "all" 
     traiga lo que se escribio en la query y eso se busque en la lista de productos
+
+10) Obtener producto por slug:
+  - creamos otro restful api pero que solo va a traer los productos segun su slug
+  - api > product > [slug].ts 
+  - la respuesta ademas de ser string por el mensaje, va a ser de tipo IProduct
+    pero solo, no le ponemos [] pq es un producto solo
+  - va a ser un metodo GET 
+  - lo que va avenir en la query es el slug (const {slug} = req.query)
+  - esto se lo pasamos a una constante product que va a buscarlo en la db
+  - para pasar esta constante como respuesta 
+
+11) Busqueda de productos:
+-  
