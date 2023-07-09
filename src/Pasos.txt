@@ -67,9 +67,16 @@ Database y Restful:
   - la respuesta ademas de ser string por el mensaje, va a ser de tipo IProduct
     pero solo, no le ponemos [] pq es un producto solo
   - va a ser un metodo GET 
-  - lo que va avenir en la query es el slug (const {slug} = req.query)
+  - lo que va a venir en la query es el slug (const {slug} = req.query)
   - esto se lo pasamos a una constante product que va a buscarlo en la db
   - para pasar esta constante como respuesta 
 
 11) Busqueda de productos:
--  
+  - otro resful api que se va a encargar de la busqueda en la pagina
+    a palabra que ingresemos va a traer los roductos que tengan esa palabra
+  - mismo procedimiento que siempre
+  - en la funcion que se ejecuta en el switch (searchProducts()) vamos a:
+    - hacer un condicional por si la query viene vacia
+    - 
+    - despues pasamos la query a string y a minuscula
+    - esto se lo pasamos a una constante product que va a buscarlo e indexarlo
