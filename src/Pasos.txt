@@ -72,11 +72,15 @@ Database y Restful:
   - para pasar esta constante como respuesta 
 
 11) Busqueda de productos:
-  - otro resful api que se va a encargar de la busqueda en la pagina
+  - api > search > [q].ts
+  - otro restful api que se va a encargar de la busqueda en la pagina
     a palabra que ingresemos va a traer los roductos que tengan esa palabra
   - mismo procedimiento que siempre
   - en la funcion que se ejecuta en el switch (searchProducts()) vamos a:
     - hacer un condicional por si la query viene vacia
-    - 
     - despues pasamos la query a string y a minuscula
+    - en models > Product vamos a crear un indice que va a conectar 2 campos
     - esto se lo pasamos a una constante product que va a buscarlo e indexarlo
+  - tambien en la carpeta search creamos el archivo > index.ts , este va a ser otro
+    api restful que solo se va a encargar de mostrar un mensaje de error en el caso 
+    de que la query este vacia
