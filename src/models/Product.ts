@@ -27,7 +27,7 @@ const productSchema = new Schema({
         },
         default: 'shirts'
     },
-    gender: { 
+    gender: {
         type: String,
         enum: {
             values: ['men', 'women', 'kid', 'unisex'],
@@ -41,8 +41,9 @@ const productSchema = new Schema({
 })
 
 // indice
-productSchema.index({title: "text", tag: "text" })
+// toma el title de los productos y los tags, los 2 de tipo texto y los une
+productSchema.index({ title: "text", tag: "text" })
 
-const Product: Model<IProduct> = mongoose.models.Product || model("Product" ,productSchema)
+const Product: Model<IProduct> = mongoose.models.Product || model("Product", productSchema)
 
 export default Product
