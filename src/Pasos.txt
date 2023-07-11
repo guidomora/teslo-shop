@@ -84,3 +84,28 @@ Database y Restful:
   - tambien en la carpeta search creamos el archivo > index.ts , este va a ser otro
     api restful que solo se va a encargar de mostrar un mensaje de error en el caso 
     de que la query este vacia
+
+------------------------------------------------------------------
+React hooks for data fetching:
+
+SWR: stale-while-revalidate
+
+Sirve para hacer peticiones, solo si la informacion cambia.
+
+status 304: indica que no hay necesidad de retransmitir la info resultante
+y nos ahorramos de volver a realizar la peticion
+
+SWR internamente tiene un useEffect
+
+12) Configuracion global SWR
+  - vamos a crear un custom hook para usar el SWR
+  - hooks > useProducts.ts
+  - en _app.js vamos a poner el provider de SWR y le tenemos que pasar la prop value
+    que va a contener un fetcher
+  - importamos useSwr
+  - creamos una funcion que va a tener todo el codigo del hook
+  - este va a recibir la url y la configuracion 
+  - vamos al index de nuestra app, llamamos a useProducts('/products') que es de donde vamos a
+    traer la data y vamos a obtener las props products e isLoading
+  - hacemos un ternario para que si isLoading es true nos arroje un "Cargando..."
+    y sino <ProductList products={products(los que trajimos del useProducts)}/> se muestra

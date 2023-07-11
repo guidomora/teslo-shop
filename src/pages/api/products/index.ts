@@ -36,7 +36,7 @@ const getProducts = async (req: NextApiRequest, res: NextApiResponse<Data>) => {
     await connect()
     const products = await Product.find(condition)
                                 // el menos indica que no traiga eso -_id 
-                                .select("title images inStock slug -_id")
+                                .select("title images inStock price slug -_id")
                                 .lean()
     await disconnect()
     return res.status(200).json(products)
