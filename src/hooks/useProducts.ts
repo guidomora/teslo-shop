@@ -11,7 +11,7 @@ import useSWR, { SWRConfiguration } from 'swr';
 export const useProducts = (url:string, config:SWRConfiguration = {}) => {
     
     // especificamos que la info de retorno es un array de IProduct
-    const { data, error } = useSWR<IProduct[]>(`/api${url}`, fetcher, config)
+    const { data, error } = useSWR<IProduct[]>(`/api${url}`, config)
 
 
     return {

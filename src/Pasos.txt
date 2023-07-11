@@ -97,7 +97,7 @@ y nos ahorramos de volver a realizar la peticion
 
 SWR internamente tiene un useEffect
 
-12) Configuracion global SWR
+12) Configuracion global SWR:
   - vamos a crear un custom hook para usar el SWR
   - hooks > useProducts.ts
   - en _app.js vamos a poner el provider de SWR y le tenemos que pasar la prop value
@@ -109,3 +109,30 @@ SWR internamente tiene un useEffect
     traer la data y vamos a obtener las props products e isLoading
   - hacemos un ternario para que si isLoading es true nos arroje un "Cargando..."
     y sino <ProductList products={products(los que trajimos del useProducts)}/> se muestra
+
+13) Mostrar pantalla de carga:
+  - components > ui > FullScreenLoading
+  - creamos un componenteque se va a mostrar mientras se cargan los productos de la tienda
+  - lo reemplazamos en el ternario que habiamos creado antes, reemplazando el cargando 
+
+14) Mostrar textos cuando la imagen esta cargada:
+  - en ProductCard.tsx creamos un useState nuevo que va a estar en false
+  - en el componente CardMedia le agregamos la prop onLoad que va a ser 
+    una funcion que ejecuta el seter del state y cambia el estado a true
+  - Luego en el Box que contiene los textos, le agregamos un ternario para que si
+    el estado es true el display sea "block" y sino "none"
+  
+15) Pantalla de productos de hombres mujeres y ninos:
+  - pages > category > kid | women | men .tsx estas paginas van a mostrar los
+    productos segun su categoria
+  - copiamos el index de nuestra app tal cual esta y lo pegamos en estos componentes
+  - solo hay que cambiarle el nombre y en el custom hook de useProducts cambiar la query 
+    por la de "/products?gender=men" y cambiarlo en cada pagina segun la categoria
+
+16) mostrar menu en la pagina activa:
+  - ui > NavBar
+  - vamos a usar el custom hook useRouter()
+  - desestructuramos asPath para obtener la ruta 
+  - en los botones en la prop color hacemos un ternario para que si
+    la ruta es igual a la ruta del boton sea el color primary sino 
+    queda con el color comun 
