@@ -136,3 +136,36 @@ SWR internamente tiene un useEffect
   - en los botones en la prop color hacemos un ternario para que si
     la ruta es igual a la ruta del boton sea el color primary sino 
     queda con el color comun 
+
+17) UI context:
+  - Context > ui > UiContext | UiProvider |UiReducer
+  - Creamos todo el codigo 
+  - envolvemos la app en el UiProvider y pasamos isMenuOpen como false
+
+18) Mostrar y navegar:
+  - le damos funcionalidad al SideMenu usando el context
+  - en NavBar llamamos al context y traemos la funcion toggleMenu, que cambia el estado
+    y la ponemos en el boton del menu para que lo abra
+  - en SideMenu llamamos al context y traemos la funcion toggleMenu y isMenuOpen
+  - creamos una funcion navigateTo que va a tener el toggleMenu, va a recibir la url
+    y hacemos un router.push para mandarla
+  - en los botones del SideMenu en el onClick le agregamos esta funcion y le mandamos
+    el enlace a donde tiene que ir segun la categoria
+
+19) pantalla de un producto: al hacer click en cualquier producto del inicio, vamos a poder entrar en su detalle
+  - vamos a ProductCard y cambiamos la url del producto por una dinamica (back ticks y product.slug)
+  - vamos a pages > product y al archivo slug.ts lo pasamo a nombrar a [slug].ts
+
+    20) getServerSideProps: genercion del lado del servidor
+    - database > dabProducts.ts creamos getProductBySlug este hook trae los productos segun su slug
+    - recibe el slug, nos conectamos a la db, lo busca, nos desconectamos, si no le entruentra
+      retorna null y finalmente lo serializamos como string
+    
+    - volvemos   [slug].ts
+    - creamos la interface Props que va a tener product : IProduct
+    - creamos la funcion getServerSideProps, desdestructuramos el ctx para obtener los params
+    - de los params desestructuramos el slug 
+    - llamamos a getProductBySlug y le pasamos el slug obtenido de los params
+    - si no se encuentra un producto lo mandamos a "/"
+    - mandamos el producto como props 
+  

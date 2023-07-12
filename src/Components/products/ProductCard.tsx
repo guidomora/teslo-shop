@@ -27,7 +27,7 @@ const ProductCard: FC<Props> = ({ product }) => {
             onMouseEnter={() => setIsHovered(true)}
             onMouseLeave={() => setIsHovered(false)}>
             <Card>
-                <NextLink href="product/slug" passHref legacyBehavior prefetch={false}>
+                <NextLink href={`product/${product.slug}`} passHref legacyBehavior prefetch={false}>
                     <Link>
                         <CardActionArea>
                             <CardMedia

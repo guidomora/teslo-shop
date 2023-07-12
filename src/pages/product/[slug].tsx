@@ -1,15 +1,31 @@
+import { GetServerSideProps } from 'next'
 import ShopLayout from '@/Components/layout/ShopLayout'
 import React from 'react'
 import { initialData } from '../../../database/products'
-import { Box, Button, Chip, Grid, Typography } from '@mui/material'
+import { Box, Button, Grid, Typography } from '@mui/material'
 import ProductSlideShow from '@/Components/products/ProductSlideShow'
 import 'react-slideshow-image/dist/styles.css'
 import ItemCounter from '@/Components/ui/ItemCounter'
 import SizeSelector from '@/Components/products/SizeSelector'
-const product = initialData.products[0]
+import { useRouter } from 'next/router'
+import { IProduct } from '@/Interfaces/products'
+import { NextPage } from 'next'
+import { getProductbySlug } from '../../../database/dbProducts'
+import { redirect } from 'next/dist/server/api-utils'
 
 
-const slug = () => {
+
+
+
+interface Props {
+  product: IProduct
+}
+
+
+const ProductPage: NextPage<Props> = ({product}) => {
+
+
+
   return (
     <ShopLayout title={product.title} pageDescription={product.description}>
       <Grid container spacing={3}>
@@ -41,4 +57,29 @@ const slug = () => {
   )
 }
 
-export default slug
+
+export const getServerSideProps: GetServerSideProps = async ({params}) => {
+
+  // desestructuramos el slug que va a venir de los params
+  const { slug } = params as {slug:string}
+
+  // se lo pasamos este custom hook que lo va a traer de la db
+  const product = await getProductbySlug(slug)
+
+  if (!product) {
+    return {
+      redirect: {
+        destination: "/",
+        permanent:false
+      }
+    }
+  }
+
+  return {
+    props: {
+      product
+    }
+  }
+}
+
+export default ProductPage
