@@ -1,17 +1,16 @@
-import { GetServerSideProps } from 'next'
-import ShopLayout from '@/Components/layout/ShopLayout'
 import React from 'react'
-import { initialData } from '../../../database/products'
+import { GetStaticPaths, GetStaticProps } from 'next'
+import { NextPage } from 'next'
+import ShopLayout from '@/Components/layout/ShopLayout'
 import { Box, Button, Grid, Typography } from '@mui/material'
 import ProductSlideShow from '@/Components/products/ProductSlideShow'
 import 'react-slideshow-image/dist/styles.css'
 import ItemCounter from '@/Components/ui/ItemCounter'
 import SizeSelector from '@/Components/products/SizeSelector'
-import { useRouter } from 'next/router'
 import { IProduct } from '@/Interfaces/products'
-import { NextPage } from 'next'
-import { getProductbySlug } from '../../../database/dbProducts'
+import { getAllProductsSlugs, getProductbySlug } from '../../../database/dbProducts'
 import { redirect } from 'next/dist/server/api-utils'
+
 
 
 
@@ -57,29 +56,72 @@ const ProductPage: NextPage<Props> = ({product}) => {
   )
 }
 
+// No vamos a usar SSR------------------------------------------
+// export const getServerSideProps: GetServerSideProps = async ({params}) => {
 
-export const getServerSideProps: GetServerSideProps = async ({params}) => {
+//   // desestructuramos el slug que va a venir de los params
+//   const { slug } = params as {slug:string}
 
-  // desestructuramos el slug que va a venir de los params
-  const { slug } = params as {slug:string}
+//   // se lo pasamos este custom hook que lo va a traer de la db
+//   const product = await getProductbySlug(slug)
 
-  // se lo pasamos este custom hook que lo va a traer de la db
-  const product = await getProductbySlug(slug)
+//   if (!product) {
+//     return {
+//       redirect: {
+//         destination: "/",
+//         permanent:false
+//       }
+//     }
+//   }
+
+//   return {
+//     props: {
+//       product
+//     }
+//   }
+// }
+// --------------------------------------------------------------------------
+
+
+
+export const getStaticPaths: GetStaticPaths = async (ctx) => {
+
+  // obtenemos el slug
+  const productSlugs = await getAllProductsSlugs()  
+
+  return {
+    //           desestructuramos slug 
+    paths: productSlugs.map(({slug}) =>({
+      params: {slug} 
+    })),
+    fallback: "blocking"
+  }
+}  
+
+
+// desestructuramos los params del context
+export const getStaticProps: GetStaticProps = async ({params}) => {
+  
+  // si el slug no viene va a ser un string vacio
+  const {slug = ""} = params as {slug:string}
+  const product = await getProductbySlug(slug) 
 
   if (!product) {
-    return {
-      redirect: {
-        destination: "/",
-        permanent:false
+      return {
+        redirect:{
+          destination: "/",
+          permanent: false
+        }
       }
-    }
   }
 
   return {
-    props: {
+    props:{
       product
-    }
+    },
+    revalidate: 86400
   }
 }
+
 
 export default ProductPage

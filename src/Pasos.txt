@@ -156,6 +156,8 @@ SWR internamente tiene un useEffect
   - vamos a ProductCard y cambiamos la url del producto por una dinamica (back ticks y product.slug)
   - vamos a pages > product y al archivo slug.ts lo pasamo a nombrar a [slug].ts
 
+    ----------------------------------------------------------------------------
+    NO SE USA ESTO, SOLO A MODO DE PRACTICA
     20) getServerSideProps: genercion del lado del servidor
     - database > dabProducts.ts creamos getProductBySlug este hook trae los productos segun su slug
     - recibe el slug, nos conectamos a la db, lo busca, nos desconectamos, si no le entruentra
@@ -168,4 +170,61 @@ SWR internamente tiene un useEffect
     - llamamos a getProductBySlug y le pasamos el slug obtenido de los params
     - si no se encuentra un producto lo mandamos a "/"
     - mandamos el producto como props 
-  
+    NO SE USA ESTO, SOLO A MODO DE PRACTICA
+    ----------------------------------------------------------------------------
+
+    21) getStaticPaths y getStaticProps
+    - dbProducts > creamos una funcion getAllProductsSlugs que va a regresar una promesa
+      de los product slug como un array
+    - creamos una interface donde indicamos que slug es string
+
+      getStaticPaths:
+    - vamos a [slug].ts usamos el snippet nextgetstaticpaths
+    - dentro creamos una constante que va a llamar a getAllProductsSlugs para obtenerlos
+    - en paths mapeamos el slug obtenido y lo pasamos como params
+      getStaticProps
+    - usamos el snippet nextstaticprops
+    - desestructuramos params del ctx 
+    - creamos una constante donde cambiamos el nombre params por slug y si viene vacio
+      va a ser un string vacio
+    - luego otra constante product al que le pasamos ese slug y lo trae con el getProductBySlug
+    - creamos un condicional donde si no se encuentra un producto lo mandamos a "/"
+    - en el return de getStaticProps como props pasamos product y agregamos un revalidate cada 24hs
+
+22) Pagina de busqueda
+- pages > search > [query].tsx 
+- vamos a SideMenu.tsx creamos un state para la busqueda que va a ser igual a ""
+- creamos la funcion onSearchTerm tiene una validacion y usa la funcion de navigateTo
+  pero le pasamos la ruta que seria para search y le incrustamos el searchTerm
+- al Input le agregamos el onChange y onKeyDown al cual le vamos a decir que si 
+  presiona enter realiza la busqueda
+
+
+  La pagina de busqueda la vamos a tener que renderizar del lado del servidor porque
+  ya deberiamos tener el termino de busqueda armado bajo las request y yo no se que es 
+  lo que va a buscar la persona, asi que no puede estar de forma estatica
+ 
+
+23)Realizar la busqueda mediante SSR  
+- database > dbProducts creamos la funcion getProductsByTerm que va a ser igual a searchProducts
+  de api > search > [q]
+- vamos a [query].tsx 
+- usamos el snippet de SSR 
+- desestructuramos params 
+- creamos una constante que va a obtener la query de los params
+- hacemos una validacion 
+- creamos un let products que hace el await de getProductsByTerm y le pasamos la query
+- pasamos products como prop y vamos a tener que crear una interface Props
+
+24) Mejorar la experiencia de usuario en la busqueda: en caso de no encontrar productos en la busqueda
+    vamos a devolver todos los productos
+- database > dbProducts creamos la funcion creamos una funcion getAllProducts (va a ser temporaria)
+  que nos va a traer todos los productos
+- seguimos en [query].tsx 
+- en la funcion de SSR vamos a agregar una constante foundProducts que va a ser un booleano dependiendo
+  de si se encontro productos 
+- creamos un condicional si foundProducts es true products va a ser igual a getAllProducts
+- agregamos a las props foundProducts y la query 
+- a la interface le agregamos foundProducts: boolean y query:string
+- las pasamos como parametros a la pagina y en el jsx agregamos un ternario para mostrar la query
+  y si no se encuentra lo que busca el cliente

@@ -1,17 +1,27 @@
-import { Box, Divider, Drawer, IconButton, Input, InputAdornment, Link, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
+import { Box, Divider, Drawer, IconButton, Input, InputAdornment, List, ListItem, ListItemButton, ListItemIcon, ListItemText, ListSubheader } from "@mui/material"
 import { AccountCircleOutlined, AdminPanelSettings, CategoryOutlined, ConfirmationNumberOutlined, EscalatorWarningOutlined, FemaleOutlined, LoginOutlined, MaleOutlined, SearchOutlined, VpnKeyOutlined } from "@mui/icons-material"
 import { UiContext } from "@/Context/ui/UiContext"
-import { useContext } from "react"
+import { useContext, useState } from "react"
 import NextLink from "next/link"
 import { useRouter } from "next/router"
 
 
 export const SideMenu = () => {
     const { isMenuOpen, toggleMenu } = useContext(UiContext)
+
+    // busqueda
+    const [searchTerm, setSearchTerm] = useState("")
     const router = useRouter()
+
     const navigateTo = (url: string) => {
         toggleMenu()
         router.push(url)
+    }
+
+    const onSearchTerm = () => {
+        if (searchTerm.trim().length === 0) return
+        // reutilizamos la funcion
+        navigateTo(`/search/${searchTerm}`)
     }
 
     return (
@@ -29,10 +39,13 @@ export const SideMenu = () => {
                         <Input
                             type='text'
                             placeholder="Buscar..."
+                            onChange={(e) => setSearchTerm(e.target.value)}
+                            autoFocus={true}
+                            onKeyUp={(e) => e.key === "Enter" ? onSearchTerm() : null} // Cuando la persona hace enter
                             endAdornment={
                                 <InputAdornment position="end">
                                     <IconButton
-                                        aria-label="toggle password visibility"
+                                        onClick={onSearchTerm}
                                     >
                                         <SearchOutlined />
                                     </IconButton>
