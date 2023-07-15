@@ -228,3 +228,23 @@ SWR internamente tiene un useEffect
 - a la interface le agregamos foundProducts: boolean y query:string
 - las pasamos como parametros a la pagina y en el jsx agregamos un ternario para mostrar la query
   y si no se encuentra lo que busca el cliente
+
+
+25) Cart Context e interfaces:
+- interfaces > cart.ts creamos una interface ICartPoduct, es identica a la de products solo que con 
+  menos datos y sin []
+- Context > CartContext.tsx | CartProvider.tsx | cartReducer.ts
+- envolvemos  _app en el CartProvider
+
+26) validar que seleccione talla:
+- vamos a pages > product > [slug].tsx 
+- creamos un state que va a ser de tipo ICartPoduct y como estado inicial va a tener todas
+  las mismas propiedades pero con algunas modificaciones
+- En el boton de agregar al carrito creamos un ternario para que si no selecciono ninguna talla
+  lo pida y sino nos muestra "Agregar al carrito"
+-
+-
+-  VER VALIDACION DE NUEVO
+-
+-
+-

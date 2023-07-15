@@ -1,15 +1,15 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { NextPage } from 'next'
 import ShopLayout from '@/Components/layout/ShopLayout'
-import { Box, Button, Grid, Typography } from '@mui/material'
+import { Box, Button, Chip, Grid, Typography } from '@mui/material'
 import ProductSlideShow from '@/Components/products/ProductSlideShow'
 import 'react-slideshow-image/dist/styles.css'
 import ItemCounter from '@/Components/ui/ItemCounter'
 import SizeSelector from '@/Components/products/SizeSelector'
-import { IProduct } from '@/Interfaces/products'
+import { IProduct, ISize } from '@/Interfaces/products'
 import { getAllProductsSlugs, getProductbySlug } from '../../../database/dbProducts'
-import { redirect } from 'next/dist/server/api-utils'
+import { ICartProduct } from '@/Interfaces/cart'
 
 
 
@@ -21,8 +21,23 @@ interface Props {
 }
 
 
-const ProductPage: NextPage<Props> = ({product}) => {
+const ProductPage: NextPage<Props> = ({ product }) => {
 
+  // con <ICartProduct> indicamos que el state va a ser de ese tipo de dato
+  const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
+    _id: product._id,
+    image: product.images[0],
+    price: product.price,
+    size: undefined,
+    slug: product.slug,
+    title: product.title,
+    gender: product.gender,
+    quantity: 1
+  })
+
+  const selectedSize = (size: ISize) => {
+    console.log("En padre:", size);
+  }
 
 
   return (
@@ -35,17 +50,25 @@ const ProductPage: NextPage<Props> = ({product}) => {
           <Box display={'flex'} flexDirection={'column'}>
             <Typography variant='h1' component="h1">{product.title}</Typography>
             <Typography variant='subtitle1' component="h2">${product.price}</Typography>
-            <Box sx={{my:2}}>
+            <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Cantidad</Typography>
               <ItemCounter />
               <SizeSelector
-               sizes={product.sizes} 
-              //  selectedSize={product.sizes[0]} 
-               />
+                sizes={product.sizes}
+                selectedSize={tempCartProduct.size}
+                onSelectedSize={selectedSize}
+              />
             </Box>
-            <Button color='secondary' className='circular-btn'>Agregar al carrito</Button>
-            {/* <Chip label="No hay disponibles" color='error' variant="outlined" /> */}
-            <Box sx={{mt:3}}>
+            {
+              (product.inStock > 0) ?
+                (<Button color='secondary' className='circular-btn'>{
+                  tempCartProduct.size ? "Agregar al carrito"
+                    : "Seleccione una talla"
+                }
+                </Button>)
+                : <Chip label="No hay disponibles" color='error' variant="outlined" />
+            }
+            <Box sx={{ mt: 3 }}>
               <Typography variant="subtitle2">Descripción</Typography>
               <Typography variant="body2">{product.description}</Typography>
             </Box>
@@ -87,36 +110,36 @@ const ProductPage: NextPage<Props> = ({product}) => {
 export const getStaticPaths: GetStaticPaths = async (ctx) => {
 
   // obtenemos el slug
-  const productSlugs = await getAllProductsSlugs()  
+  const productSlugs = await getAllProductsSlugs()
 
   return {
     //           desestructuramos slug 
-    paths: productSlugs.map(({slug}) =>({
-      params: {slug} 
+    paths: productSlugs.map(({ slug }) => ({
+      params: { slug }
     })),
     fallback: "blocking"
   }
-}  
+}
 
 
 // desestructuramos los params del context
-export const getStaticProps: GetStaticProps = async ({params}) => {
-  
+export const getStaticProps: GetStaticProps = async ({ params }) => {
+
   // si el slug no viene va a ser un string vacio
-  const {slug = ""} = params as {slug:string}
-  const product = await getProductbySlug(slug) 
+  const { slug = "" } = params as { slug: string }
+  const product = await getProductbySlug(slug)
 
   if (!product) {
-      return {
-        redirect:{
-          destination: "/",
-          permanent: false
-        }
+    return {
+      redirect: {
+        destination: "/",
+        permanent: false
       }
+    }
   }
 
   return {
-    props:{
+    props: {
       product
     },
     revalidate: 86400

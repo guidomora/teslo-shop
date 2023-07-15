@@ -1,3 +1,4 @@
+import CartProvider from '@/Context/cart/CartProvider'
 import UiProvider from '@/Context/ui/UiProvider'
 import '@/styles/globals.css'
 import { lightTheme } from '@/themes'
@@ -12,12 +13,14 @@ export default function App({ Component, pageProps }: AppProps) {
         fetcher: (...args: [key: string]) => fetch(...args).then((res) => res.json())
       }}
     >
-      <UiProvider isMenuOpen>
-        <ThemeProvider theme={lightTheme}>
-          <CssBaseline />
-          <Component {...pageProps} />
-        </ThemeProvider>
-      </UiProvider>
+      <CartProvider>
+        <UiProvider isMenuOpen>
+          <ThemeProvider theme={lightTheme}>
+            <CssBaseline />
+            <Component {...pageProps} />
+          </ThemeProvider>
+        </UiProvider>
+      </CartProvider>
     </SWRConfig>
   )
 }
