@@ -242,9 +242,11 @@ SWR internamente tiene un useEffect
   las mismas propiedades pero con algunas modificaciones
 - En el boton de agregar al carrito creamos un ternario para que si no selecciono ninguna talla
   lo pida y sino nos muestra "Agregar al carrito"
--
--
--  VER VALIDACION DE NUEVO
--
--
--
+- components > products > SizeSelector.tsx
+- a la interface le agregamos la funcion onSelectedSize, en el componente la desestructuramos
+- en el onClick llamamos a la funcion y le pasamos el size
+- [slug].tsx  creamos una funcion selectedSize, la cual va a setear el talle del producto
+- en el componente SizeSelector llamamos a onSelectedSize y le pasamos selectedSize
+
+27) Contador de productos:
+- 

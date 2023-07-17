@@ -36,7 +36,17 @@ const ProductPage: NextPage<Props> = ({ product }) => {
   })
 
   const selectedSize = (size: ISize) => {
-    console.log("En padre:", size);
+    setTempCartProduct(currentProduct => ({
+      ...currentProduct,
+      size
+    }))
+  }
+
+  const onUpdateQuantity = (quantity: number) => {
+    setTempCartProduct(currentProduct => ({
+      ...currentProduct,
+      quantity
+    }))
   }
 
 
@@ -52,7 +62,11 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             <Typography variant='subtitle1' component="h2">${product.price}</Typography>
             <Box sx={{ my: 2 }}>
               <Typography variant='subtitle2'>Cantidad</Typography>
-              <ItemCounter />
+              <ItemCounter
+              currentValue={tempCartProduct.quantity} 
+              maxValue={product.inStock > 5 ? product.inStock :5 }
+              updateQuantity={onUpdateQuantity}
+              />
               <SizeSelector
                 sizes={product.sizes}
                 selectedSize={tempCartProduct.size}
