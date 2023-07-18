@@ -2,9 +2,10 @@ import CartList from '@/Components/cart/CartList'
 import OrderSummary from '@/Components/cart/OrderSummary'
 import ShopLayout from '@/Components/layout/ShopLayout'
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material'
-import React from 'react'
 
 const CartPage = () => {
+
+
   return (
     <ShopLayout title='Carrito - 3' pageDescription={"Carrito de compras de la tienda"}>
         <Typography variant='h1' component="h1">Carrito</Typography>

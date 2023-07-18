@@ -276,3 +276,35 @@ SWR internamente tiene un useEffect
   el tempCartProduct
 
 29) Almacenar el carrito en las cookies:
+- CartProvider creamos un state con estado inicial en false
+- creamos el primer useEffect este va a tener un try catch
+- en el try si el estado es falso averiguamos si hay un carrito en las cookies y sino se crea un array vacio
+  y despachamos la accion que carga el carrito desde las cookies 
+- en el catch despachamos la misma accion pero el payload va a ser un array vacio
+- creamos el segundo useEffect que va a setear los productos en las cookies cada vez que se detecte 
+  algun cambio en el carrito y haya alguna modificacion en el estado creado 
+
+30) Mostrar productos en el carrito:
+- CartList.tsx solo tenemos que traer el CartContext
+- reemplazamos el mapeo que estaba hecho previamente
+
+31) Actualizar cantidad desde el carrito:
+- cartReducer creamos una accion donde el payload va a ser de tipo ICartProduct
+- mapeamos el cart y nos fijamos que el id y el size sean diferentes, al no ser diferentes retorna el 
+  action.payload
+- CartProvider creamos una funcion que va a despachar la accion creada en el reducer y como payload recibe 
+  el producto que es de tipo ICartProduct
+- CartContext especificamos el tipo de la funcion creada en el provider
+- CartList creamos una funcion que va a recibir el producto:ICartPoduct y un valor:number
+- esta funcion iguala la cantidad del producto a la del nuevo valor y se lo pasamos a la funcion creada en
+  el provider
+- esta funcion la vamos a pasar al updateQuantity del ItemCounter y le tenemos que pasar el producto y el valor
+
+32) Eliminar un producto del carrito:
+- cartReducer creamos una accion donde el payload va a ser de tipo ICartProduct
+- hacemos un filter del cart y nos fijamos que si el id y el size son iguales nos de false
+  caso contrario true
+- CartProvider creamos una funcion que va a despachar la accion creada en el reducer y como payload recibe 
+  el producto que es de tipo ICartProduct
+- CartContext especificamos el tipo de la funcion creada en el provider
+- CartList importamos la funcion del context y la mandamos al onclick delk boton remove y le pasamos el producto

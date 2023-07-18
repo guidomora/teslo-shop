@@ -43,7 +43,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     try {
       if (!isMounted) {
         // primero hay que preguntar si existe el "!" es para decir que ya hicimos la evaluacion
-        const cart = Cookie.get("cart") ? JSON.parse(Cookie.get("cart")!) : "[]"
+        const cart = Cookie.get("cart") ? JSON.parse(Cookie.get("cart")!) : []
         dispatch({
           type: "[Cart] - LoadCart from cookies | storage",
           payload: cart,
@@ -91,10 +91,21 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     dispatch({ type: "[Cart] - Update products in cart", payload: updatedProducts })
   }
 
+
+  const updateCartQuantity = (product:ICartProduct) => {
+    dispatch({type:"[Cart] - Change product quantity", payload: product})
+  }
+
+  const removeCartProduct = (product:ICartProduct) => {
+    dispatch({type:"[Cart] - Remove product in cart", payload: product})
+  }
+
   return (
     <CartContext.Provider value={{
       ...state,
       addProductToCart,
+      updateCartQuantity,
+      removeCartProduct
     }}>
       {children}
     </CartContext.Provider>
