@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { GetStaticPaths, GetStaticProps } from 'next'
 import { NextPage } from 'next'
 import ShopLayout from '@/Components/layout/ShopLayout'
@@ -10,6 +10,8 @@ import SizeSelector from '@/Components/products/SizeSelector'
 import { IProduct, ISize } from '@/Interfaces/products'
 import { getAllProductsSlugs, getProductbySlug } from '../../../database/dbProducts'
 import { ICartProduct } from '@/Interfaces/cart'
+import { useRouter } from 'next/router'
+import { CartContext } from '@/Context/cart/CartContext'
 
 
 
@@ -22,6 +24,8 @@ interface Props {
 
 
 const ProductPage: NextPage<Props> = ({ product }) => {
+  const {addProductToCart} = useContext(CartContext)
+  const router = useRouter()
 
   // con <ICartProduct> indicamos que el state va a ser de ese tipo de dato
   const [tempCartProduct, setTempCartProduct] = useState<ICartProduct>({
@@ -47,6 +51,14 @@ const ProductPage: NextPage<Props> = ({ product }) => {
       ...currentProduct,
       quantity
     }))
+  }
+
+  const look = () => {
+    if (!tempCartProduct.size) {
+      return
+    } 
+    addProductToCart(tempCartProduct)
+    router.push("/cart")
   }
 
 
@@ -75,7 +87,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
             </Box>
             {
               (product.inStock > 0) ?
-                (<Button color='secondary' className='circular-btn'>{
+                (<Button color='secondary' className='circular-btn' onClick={look}>{
                   tempCartProduct.size ? "Agregar al carrito"
                     : "Seleccione una talla"
                 }

@@ -5,3 +5,5 @@ npm install react-slideshow-image -S
 npm install @mui/x-data-grid
 npm install mongoose
 npm i swr
+npm i js-cookie
+npm i --save-dev @types/js-cookie

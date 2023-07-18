@@ -1,29 +1,102 @@
-import { FC, PropsWithChildren, ReactNode, useReducer } from "react";
+import { FC, PropsWithChildren, ReactNode, useEffect, useReducer, useState } from "react";
 import { CartContext } from "./CartContext";
-import { cartReducer } from "./CartReducer";
+import { cartReducer } from "./cartReducer";
 import { ICartProduct } from "@/Interfaces/cart";
+import Cookie from "js-cookie"
 
 // No es lo mismo que en el CartContext, esta va a ser la interfaz del estado
 export interface CartState {
-   cart: ICartProduct[]
+  cart: ICartProduct[]
 }
 
 const CART_INITIAL_STATE: CartState = {
-    cart: []
+  cart: []
 }
 
 
 // Creamos el provider
-const CartProvider:FC<PropsWithChildren> = ({children}) => {
-  
-    // Como va a menejar el estado el provider
+const CartProvider: FC<PropsWithChildren> = ({ children }) => {
+
+  // Como va a menejar el estado el provider
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE)
 
-    return (
+
+  // Asi era originalmente pero para que funcione asi hay que desactivar el strict mode
+  // useEffect(() => {
+  //   // primero hay que preguntar si existe el "!" es para decir que ya hicimos la evaluacion
+  //   const cartFromCookies = Cookie.get("cart") ? JSON.parse(Cookie.get("cart")!) : []
+  //   dispatch({type:"[Cart] - LoadCart from cookies | storage", payload:cartFromCookies})
+  // }, [])
+
+
+  // useEffect(() => {
+  //   Cookie.set("cart", JSON.stringify(state.cart)) // grabacion del carrito en las cookies
+  // }, [state.cart])
+
+
+  const [isMounted, setIsMounted] = useState(false);
+
+
+  useEffect(() => {
+    // Por si el usuario manipula la cookie, entonces como no se va a poder leer
+    // en el catch genera un array vacio
+    try {
+      if (!isMounted) {
+        // primero hay que preguntar si existe el "!" es para decir que ya hicimos la evaluacion
+        const cart = Cookie.get("cart") ? JSON.parse(Cookie.get("cart")!) : "[]"
+        dispatch({
+          type: "[Cart] - LoadCart from cookies | storage",
+          payload: cart,
+        });
+        setIsMounted(true);
+      }
+    } catch (error) {
+      dispatch({
+        type: "[Cart] - LoadCart from cookies | storage",
+        payload: [],
+      });
+    }
+
+
+  }, [isMounted]);
+
+
+  useEffect(() => {
+    if (isMounted) Cookie.set("cart", JSON.stringify(state.cart)); // grabacion del carrito en las cookies
+  }, [state.cart, isMounted]);
+
+
+
+
+
+
+  const addProductToCart = (product: ICartProduct) => {
+    // si el id del producto existe devuelve un true
+    const productInCart = state.cart.some(p => p._id === product._id)
+    // si no existe, se agrega al carrito
+    if (!productInCart) return dispatch({ type: "[Cart] - Update products in cart", payload: [...state.cart, product] })
+
+    // si el id y el size son iguales devuelve true
+    const productInCartButDifferentSize = state.cart.some(p => p._id === product._id && p.size === product.size)
+    if (!productInCartButDifferentSize) return dispatch({ type: "[Cart] - Update products in cart", payload: [...state.cart, product] })
+
+    const updatedProducts = state.cart.map(p => {
+      if (p._id !== product._id) return p; // si el id no es igual no hacemos nada
+      if (p.size !== product.size) return p;  // si el size no es igual no hacemos nada
+
+      p.quantity += product.quantity // Actualizamos la cantidad
+      return p
+    })
+    // en el payload mandamos directo el uppdatedProductos
+    dispatch({ type: "[Cart] - Update products in cart", payload: updatedProducts })
+  }
+
+  return (
     <CartContext.Provider value={{
-        ...state,
+      ...state,
+      addProductToCart,
     }}>
-        {children}
+      {children}
     </CartContext.Provider>
   )
 }

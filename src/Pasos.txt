@@ -249,4 +249,30 @@ SWR internamente tiene un useEffect
 - en el componente SizeSelector llamamos a onSelectedSize y le pasamos selectedSize
 
 27) Contador de productos:
-- 
+- components > ui > ItemCounter
+- creamos una interface 
+- el ItemCounter va a recibir maxValue, currentValue, updateQuantity(una funcion)
+- creamos una funcion que recibe un valor y se va a encargar de sumar y restar y evaluar segun el stock hasta
+  cuantos productos puede comprar
+- asignamos esa funcion a los botones y le ponemos +1 a la de sumar y -1 a la de restar
+- pages > product > [slug].tsx 
+- creamos la funcion onUpdateQuantity que se va a encargar de modificar la cantidad en el estado
+- ahora al ItemCounter le tenemos que agregar las props de la interface
+
+28) Agregar al carrito:
+- cartReducer creamos el case "Update products in cart"
+- CartContext a la interface le agregamos el tipo de la funcion addProductToCart, la cual vamos a crear
+  en el provider
+- CartProvider creamos la funcion addProductToCart esta va a recibir un producto que va a ser de tipo ICartPoduct
+  - creamos una validacion booleana para ver si el id del producto nuevo es igual a algun producto del carrito
+  - si la validacion es false se agrega el producto al carrito 
+  - otra validacion booleana para ver si el id y el size del producto nuevo son iguales a los de algun producto
+    en el carrito
+  - si es false se agrega el producto al carrito
+  - mapeamos el carrito y si el id y el size del producto nuevo son iguales a los de alguno en el carrito, 
+    la cantidad se suma
+  - esto lo pasamos como payload
+- [slug].tsx traemos addProductToCart del CartContext y lo mandamos a al boton de agregar al carrito y le pasamos
+  el tempCartProduct
+
+29) Almacenar el carrito en las cookies:
