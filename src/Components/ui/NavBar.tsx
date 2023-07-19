@@ -1,3 +1,4 @@
+import { CartContext } from '@/Context/cart/CartContext';
 import { UiContext } from '@/Context/ui/UiContext'
 import { ClearOutlined, SearchOutlined, ShoppingCartOutlined } from '@mui/icons-material'
 import { AppBar, Badge, Box, Button, IconButton, Link, Toolbar, Typography, Input, InputAdornment } from '@mui/material';
@@ -9,6 +10,7 @@ const NavBar = () => {
   const { isMenuOpen, toggleMenu } = useContext(UiContext)
   const [searchTerm, setSearchTerm] = useState("")
   const [isSearchVisible, setIsSearchVisible] = useState(false)
+  const {numberOfItems} = useContext(CartContext)
 
   const { asPath, push } = useRouter()
 
@@ -86,7 +88,7 @@ const NavBar = () => {
         <NextLink legacyBehavior href="/cart" passHref>
           <Link>
             <IconButton>
-              <Badge badgeContent={2} color='secondary'>
+              <Badge badgeContent={numberOfItems > 9 ? "+9" : numberOfItems} color='secondary'>
                 <ShoppingCartOutlined />
               </Badge>
             </IconButton>

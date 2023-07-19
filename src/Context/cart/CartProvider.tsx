@@ -6,11 +6,21 @@ import Cookie from "js-cookie"
 
 // No es lo mismo que en el CartContext, esta va a ser la interfaz del estado
 export interface CartState {
-  cart: ICartProduct[]
+  cart: ICartProduct[],
+  numberOfItems: number;
+  subTotal: number;
+  taxRate: number;
+  tax: number;
+  total: number;
 }
 
 const CART_INITIAL_STATE: CartState = {
-  cart: []
+  cart: [],
+  numberOfItems: 0,
+  subTotal: 0,
+  taxRate: 0,
+  tax: 0,
+  total: 0
 }
 
 
@@ -66,6 +76,21 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
   }, [state.cart, isMounted]);
 
 
+  useEffect(() => {
+    // reduce suma por iteraciones, el valor inicial es 0
+    const numberOfItems = state.cart.reduce((prev, current) => current.quantity + prev, 0)
+    const subTotal = state.cart.reduce((prev, current) => current.price * current.quantity + prev, 0)
+    const taxRate = Number(process.env.NEXT_PUBLIC_TAX_RATE || 0)
+    const orderSummary = {
+      numberOfItems,
+      subTotal,
+      taxRate,
+      tax: subTotal * taxRate,
+      total: subTotal * (taxRate + 1)
+    }
+    dispatch({type:"[Cart] - Update order summary", payload:orderSummary})
+
+  }, [state.cart])
 
 
 
@@ -92,12 +117,12 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
 
-  const updateCartQuantity = (product:ICartProduct) => {
-    dispatch({type:"[Cart] - Change product quantity", payload: product})
+  const updateCartQuantity = (product: ICartProduct) => {
+    dispatch({ type: "[Cart] - Change product quantity", payload: product })
   }
 
-  const removeCartProduct = (product:ICartProduct) => {
-    dispatch({type:"[Cart] - Remove product in cart", payload: product})
+  const removeCartProduct = (product: ICartProduct) => {
+    dispatch({ type: "[Cart] - Remove product in cart", payload: product })
   }
 
   return (

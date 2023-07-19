@@ -308,3 +308,32 @@ SWR internamente tiene un useEffect
   el producto que es de tipo ICartProduct
 - CartContext especificamos el tipo de la funcion creada en el provider
 - CartList importamos la funcion del context y la mandamos al onclick delk boton remove y le pasamos el producto
+
+33) Calcular montos a pagar: 
+- CartProvider creamos un useEffect mas para que tambien se grabe en las cookies y se ejecuta cada vez que 
+  el cart cambia
+- creamos una constante numberOfItems que usa el metodo reduce
+- este va sumando por iteraciones usando el valor inicial, valor previo y valor actual
+- el valor inicial es 0 pero que al arrancar seria el valor anterior y se le suma el valor actual (primer iteracion)
+  el valor actual anterior pasa a ser el valor anterior y se le suma el nuevo valor actual (segunda iteracion) y asi
+- este se va a ejecutar cada vez que haya un cambio en el carrito
+- hacemos lo mismo para sacar el subtotal pero la cuenta varia
+- creamos una constante taxRate que obtiene de .env la NEXT_PUBLIC_TAX_RATE que es el valor del tax
+  pero lo ponemos en esa variable de entorno publica para no poner el valor en duro
+  - la variable al ser un string la pasamos a number y tambien usamos el || para indicar que si
+    no se encuentra valor va a dar un error al ser 0
+- luego creamos un objeto orderSummary en el que vamos a poner todas las constantes que creamos
+
+34) Colocar montos en la pnatalla:
+- cartReducer creamos una accion nueva para actualizar la orden, en la parte de actionType, el payload
+   va a ser igual al objeto que habiamos creado antes (orderSummary)
+- creamos la accion que va a tener el spread del state y del action.payload
+- en el estado inicial definimos todas las propiedades de la order OrderSummary, que es igual al objeto
+  solo que todas van a ser igual a 0
+- CartContext hacemos lo mismo definimos las propiedades en la interface
+- CartProvider en el useEffect que habiamos creado para la orderSummary despachamos la accion que creamos
+  y el payload va a ser la orderSummary
+- OrderSummary importamos del context todas las propiedades de la orden y las ponemos en el jsx
+- utils > currency.ts va a ser un formateador para acomodar mejor los precios de la order
+- va a recibir un value y lo transforma
+- OrderSummary > importamos el formateador y le pasamos cada una de las propiedades de la orden
