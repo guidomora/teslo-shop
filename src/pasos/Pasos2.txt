@@ -1,0 +1,31 @@
+1) Modelo de usuario:
+- interfaces > user.ts creamos una interface para el usuario llamada IUser
+- models > Users.ts creamos el modelo de usuario, aclaramos que es de tipo IUser
+  y especificamos los roles que va a haber
+
+2) Insertar usuarios de prueba:
+- database > el archivo products.ts pasa a llamarse seed-data.ts
+- en este archivo vamos a crear una interface SeedUser la cual vamos a agregar a
+  la interface SeedData 
+- en initialData que es donde tenemos todos los productos, vamos a crear un array nuevo
+  con datos de 2 usuarios 1 admin y el otro cliente
+- instalamos bcrypt para encriptar las contraseñas y lo aplicamos
+- api > seed.ts vamos a agregar las lineas de codigo para borrar y agregar los usuarios
+  cuando se hace la peticion 
+- ahora al hacer la peticion a seed ademas de agregarse productos tambien se agregan
+  los usuarios con sus contraseñas encriptadas
+
+3) REST login :
+- api > login.ts endpoint con el cual vamos a iniciar sesion
+- usamos el snippet nextapi en el type vamos a crear uno nuevo ademas del de message
+- creamos un switch para hacer el login y el metodo va a ser post 
+- creamos la funcion del loggin, del body de la request vamos a obtener el mail y la password
+- hacemos 2 validaciones:\
+    - 1 si el usuario no existe tira bad request
+    - 2 bcrypt compara la password y si no coincide tira bad request
+- del user extraemos el role y el nombre
+- retornamos un status 200 el cual va a tener el token (todavia no lo tenemos) y del usuario
+  email, role y nombre
+- vamos a postman y probamos el endpoint /user/login 
+- POST y en el body hay que elegir x-www-form..... como keys hay que mandar mail y password
+  y en el body de cada uno un mail y password validos 

@@ -2,7 +2,8 @@
 import Product from '@/models/Product'
 import type { NextApiRequest, NextApiResponse } from 'next'
 import { connect, disconnect } from '../../../database/db'
-import { initialData } from '../../../database/products'
+import { initialData } from '../../../database/seed-data'
+import User from '@/models/Users'
 
 type Data = {
     message:string
@@ -17,9 +18,11 @@ export default async function (req: NextApiRequest, res: NextApiResponse<Data>) 
     }
     await connect()
     // En este punto podemos hacer cualquier interaccion con la db
+    await User.deleteMany()
     await Product.deleteMany()
     // insertamos las entries que habiamos puesto en el archivo seeddata
     await Product.insertMany(initialData.products)
+    await User.insertMany(initialData.users)
     await disconnect()
     
     res.status(200).json({ message: 'Proceso realizado correctamente' })

@@ -7,3 +7,5 @@ npm install mongoose
 npm i swr
 npm i js-cookie
 npm i --save-dev @types/js-cookie
+npm install bcryptjs
+npm i --save-dev @types/bcryptjs

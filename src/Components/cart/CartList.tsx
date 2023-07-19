@@ -1,5 +1,5 @@
 import React, { FC, useContext } from 'react'
-import { initialData } from '../../../database/products';
+import { initialData } from '../../../database/seed-data';
 import { Box, Button, CardActionArea, CardMedia, Grid, Link, Typography } from '@mui/material';
 import NextLink from "next/link"
 import ItemCounter from '../ui/ItemCounter';
