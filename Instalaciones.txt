@@ -9,3 +9,6 @@ npm i js-cookie
 npm i --save-dev @types/js-cookie
 npm install bcryptjs
 npm i --save-dev @types/bcryptjs
+npm i jsonwebtoken
+npm i --save-dev @types/jsonwebtoken
+npm install react-hook-form

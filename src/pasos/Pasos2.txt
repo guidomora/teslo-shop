@@ -29,3 +29,75 @@
 - vamos a postman y probamos el endpoint /user/login 
 - POST y en el body hay que elegir x-www-form..... como keys hay que mandar mail y password
   y en el body de cada uno un mail y password validos 
+
+4) Crear JWT:
+- .env > creamos una variable para el jwt
+- utils > jwt.ts vamos a crear una funcion para crear el jwt
+- creamos una funcion que va a recibir el id y el mail
+- hacemos una validacion pra ver si existe la varialble (semilla)
+- la funcion sign de jwt necesita un payload y la semilla, tambien le podemos agregar un opcional
+- login.ts abajo de la constante que desestructura el user
+- creamos una constante token en la cual llamamos a la funcion creada en jwt y le pasamos 
+  el id y el mail del usuario
+- esta constante la mandamos dentro de la respuesta 
+
+5) REST Registro de usuario:
+- api > register.ts copiamos todo el codigo de login.ts lo pegamos y lo vamos a modificar
+- le cambiamos el nombre a la funcion por registerUser
+- a la desestructuracion del body de la respuesta le agregamos el nombre y los tipos de datos
+- primer validacion: la contraseña debe ser mayor a 6
+- segunda validacion: el nombre debe ser mayor a 2
+- aca nos conectamos a la db y creamos una constante que busca si hay un usuario con ese mail
+- tercer validacion: el mail no debe existir
+- creamos un newUser y con la contraseña encriptada 
+- hacemos un trycatch en donde se va a guardar el newUser
+- desestructuramos el id y el role del newUser 
+
+6) Validar correo electronico:
+- https://gist.github.com/Klerith/b5b6c223843aeb683b8479d188ea35ae
+- funciones para validar el correo hechas por fernando
+- utils > validations.ts pegamos todo el codigo
+- register.ts creamos un condicional que usa isValidEmail (gist) para que si el correo no es valido 
+  arroja un mensaje de error
+
+7) Validar y renovar JWT:
+- user > validate-toke.ts
+- pegamos todo el codigo del login.ts
+- cambiamos el metodo del switch por un GET
+- la funcion se va a llamar checkJWT
+- el token lo vamos a obtener de las cookies
+- utils > jwt.ts vamos a crear una funcion para ver si el token es valido
+- se crea una validacion isValidToken para ver si la semilla existe y sino arroja error
+- retornamos una promesa que va a tener un trycatch
+- en el try se usa la funcion verify (de jwt) que requiere un token, la semilla y un callback en el cual
+  recibiriamos un error y si todo sale bien el payload
+  - si hay un error hasta ahi se llega
+  - sino vamos a poder obteener el id del payload y especificamos que es de tipo string
+  - al resolve de la promise le mandamos el id
+- en el catch mandamos el reject con un mensaje de error
+- validate-toke.ts creamos una variable userId
+- un trycatch donde userId va a ser igual a isValidToken y le pasamos el token y el en catchun mensaje de error
+- nos conectamos a la db 
+- se obtiene el usuario a traves del id
+- nos desconectamos de la db
+- hacemos una validacion para ver si el usuario existe 
+- desestructuramos el id, mail, nombre y role del usuario y lo mandamos a la respuesta
+- POSTMAN: vamos a utilizar este endpoint http://localhost:3000/api/user/validate-token
+  - una peticion GET 
+  - vamos a la parte de cookies 
+  - en el domain name escribimos localhost:3000
+  - tocamos en add cookie y de nombre le ponemos "token", en el value le ponemos un token valido
+    y el resto del codigo lo dejamos como estaba 
+  - ahora al darle a send deberiamos ver el token y el usuario al que le pertenece ese token
+
+8) Login Form - React hook Form:
+- instalamos React hook Form
+- auth > login.tsx creamos un type (FormData) para el form
+- llamamos a useForm (propio de React hook Form) el cual le desestructuramos varias funciones y 
+  aclaramos que es de tipo FormData
+- creamos la funcion onLoginUser que va a recibir la data de tipo FormData
+- envolvemos el jsx en un form y en el onSubmit le mandamos una de las funciones que desestructuramos
+  del useForm y dentro le mandamos la funcion onLoginUser
+- a los inputs tenemos que pasarles una propagacion de una de las funciones del useForm
+  y le escribiriamos cual seria el nombre del input
+- al boton le agregariamos el type de submit
