@@ -101,3 +101,11 @@
 - a los inputs tenemos que pasarles una propagacion de una de las funciones del useForm
   y le escribiriamos cual seria el nombre del input
 - al boton le agregariamos el type de submit
+
+9) Validaciones en el form:
+- login.tsx > en donde habiamos hecho la propagacion antes 
+- agregamos la prop required para indicar que ese campo es requerido si o si
+- para validarlo agregamos la prop validate y usamos la funcion que copiamos del gist de fernando
+- para marcar los errores usamos la prop de MUI a la cual le pasamos como argumento errors que es 
+  de React hook forms y en el texto hacemos lo mismo pero con el mensaje de errors, que lo habiamos
+  definido en required

@@ -1,8 +1,11 @@
 import AuthLayout from '@/Components/layout/AuthLayout'
-import React from 'react'
-import { Box, Grid, Typography, TextField, Button, Link } from '@mui/material';
+import React, { useState } from 'react'
+import { Box, Grid, Typography, TextField, Button, Link, Chip } from '@mui/material';
 import NextLink from "next/link"
 import { useForm } from 'react-hook-form';
+import { isEmail } from '@/utils/validations';
+import tesloApi from '@/api/tesloAPi';
+import { ErrorOutline } from '@mui/icons-material';
 
 type FormData = {
     email: string
@@ -11,9 +14,23 @@ type FormData = {
 
 const LoginPage = () => {
     const { register, handleSubmit, formState: { errors }, } = useForm<FormData>()
+    const [showError, setShowError] = useState(false)
 
-    const onLoginUser = (data: FormData) => {
-        console.log(data);
+    const onLoginUser = async ({email, password}: FormData) => {
+        setShowError(false)
+
+       try {
+        const {data} = await tesloApi.post("/user/login", {email, password})
+        const {token, user} = data
+        console.log({token, user});
+        
+       } catch (error) {
+            console.log(error);
+            setShowError(true)
+            setTimeout(() => {
+                setShowError(false)
+            }, 3000);
+       }
     }
 
     return (
@@ -23,6 +40,8 @@ const LoginPage = () => {
                     <Grid container spacing={2}>
                         <Grid item xs={12}>
                             <Typography variant='h1' component="h1">Iniciar Sesión</Typography>
+                            <Chip label="No reconocemos ese usuario / contraseña" color='error' icon={<ErrorOutline />}
+                            className='fadeIn' sx={{display: showError ? "flex" : "none"}} />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField 
@@ -30,7 +49,13 @@ const LoginPage = () => {
                             variant="filled" 
                             fullWidth
                             type="email"
-                            {...register("email")}/>
+                            {...register("email", {
+                                required: "Este campo es requerido",
+                                validate: isEmail
+                            })}
+                            error={!!errors.email} // doble negacion: propio de TS, si existe el error.....
+                            helperText={errors.email?.message} // si existe el mensaje, sino es undefined
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <TextField 
@@ -38,7 +63,13 @@ const LoginPage = () => {
                             variant="filled" 
                             fullWidth
                             type='password'
-                            {...register("password")}/>
+                            {...register("password", {
+                                required:"Este campo es requerido",
+                                minLength: {value: 6, message: "Minimo 6 caracteres"}
+                            })}
+                            error={!!errors.password}
+                            helperText={errors.password?.message}
+                            />
                         </Grid>
                         <Grid item xs={12}>
                             <Button type='submit' color='secondary' className='circular-btn' size="large" fullWidth>
