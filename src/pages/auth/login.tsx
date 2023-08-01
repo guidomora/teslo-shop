@@ -4,8 +4,8 @@ import { Box, Grid, Typography, TextField, Button, Link, Chip } from '@mui/mater
 import NextLink from "next/link"
 import { useForm } from 'react-hook-form';
 import { isEmail } from '@/utils/validations';
-import tesloApi from '@/api/tesloAPi';
 import { ErrorOutline } from '@mui/icons-material';
+import tesloApi from '@/api/tesloApi';
 
 type FormData = {
     email: string
@@ -35,7 +35,7 @@ const LoginPage = () => {
 
     return (
         <AuthLayout title='Ingresar'>
-            <form onSubmit={handleSubmit(onLoginUser)}>
+            <form onSubmit={handleSubmit(onLoginUser)} noValidate>
                 <Box sx={{ width: 350, padding: "20px 20px" }}>
                     <Grid container spacing={2}>
                         <Grid item xs={12}>

@@ -109,3 +109,16 @@
 - para marcar los errores usamos la prop de MUI a la cual le pasamos como argumento errors que es 
   de React hook forms y en el texto hacemos lo mismo pero con el mensaje de errors, que lo habiamos
   definido en required
+
+
+-------------------------------------NO ES DEFINITIVO-------------------------------------
+10) validacion contra el backend:
+- src > api > tesloApi instalamos axios
+- creamos una instancia con axios
+- login.tsx en la funcion onLoginUser hacemos un trycatch
+- hacemos una peticion post a traves de tesloApi a "/user/login" y mandamos el mail y password
+- de la data desestructuramos el token y el usuario
+- en el catch solo mostramos el error
+
+11) Mostrar mendaje de error en la pantalla:
+- 
