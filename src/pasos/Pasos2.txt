@@ -121,4 +121,10 @@
 - en el catch solo mostramos el error
 
 11) Mostrar mendaje de error en la pantalla:
-- 
+- por el momento hacemos el mismo procedimiento que hicimos en el login pero 
+  adaptandolo al register
+
+-------------------------------------NO ES DEFINITIVO-------------------------------------
+
+12) AuthContext: 
+- creamos el provider, reducer y Context para la autenticacion

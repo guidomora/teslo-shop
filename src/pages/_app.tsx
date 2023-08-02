@@ -1,3 +1,4 @@
+import AuthProvider from '@/Context/auth/AuthProvider'
 import CartProvider from '@/Context/cart/CartProvider'
 import UiProvider from '@/Context/ui/UiProvider'
 import '@/styles/globals.css'
@@ -13,7 +14,8 @@ export default function App({ Component, pageProps }: AppProps) {
         fetcher: (...args: [key: string]) => fetch(...args).then((res) => res.json())
       }}
     >
-      <CartProvider>
+      <AuthProvider isLoggedIn={false}>
+        <CartProvider>
         <UiProvider isMenuOpen>
           <ThemeProvider theme={lightTheme}>
             <CssBaseline />
@@ -21,6 +23,8 @@ export default function App({ Component, pageProps }: AppProps) {
           </ThemeProvider>
         </UiProvider>
       </CartProvider>
+      </AuthProvider>
+      
     </SWRConfig>
   )
 }
