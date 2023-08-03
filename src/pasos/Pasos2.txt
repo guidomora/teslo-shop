@@ -128,3 +128,29 @@
 
 12) AuthContext: 
 - creamos el provider, reducer y Context para la autenticacion
+
+13) Dispara acciones de Login:
+- authReducer: creamos la accion Login que hace que el estado pase a ser true y el
+  user va a ser el payload
+- AuthProvider: creamos la funcion loginUser que es basicamente lo mismo que creamos en login.tsx 
+  en el punto 10 
+- AuthContext: especificamos el tipo de la funcion loginUser 
+- login.tsx dentro de onLoginUser llamamos esa funcion a traves del context, le pasamos el mail
+  y la password. creamos un condicion para que si falla el login muestre los errores
+- usamos el router.replace() que hace que el usuario no pueda volver a la pagina donde estaba antes
+
+14) Dispara acciones de Registro:
+- mismo procedimiento que en el 13 solo que cambia la parte de los errores
+- AuthProvider: creamos la funcion registerUser, el try es identico al del login y en el catch
+  creamos 2 condicionales para ver si el error es de axios (fuera de nuestro alcance) o si es
+  del registro
+- register.tsx: de la funcion registerUser desestructuramos el message y hasError
+- si hasError es true se muestra el error
+
+15) Recuperar el estado de autenticacion del usuario: al recargar la pag no se pierda el token y tengamos
+    que volver a autenticarnos
+- AuthProvider: creamos la funcion checkToken, muy similar a loginUser
+- cambia el endpoint al cual llamamos, de ahi trae el usuario y el token, los seteamos en las cookies
+- despachamos el login y el payload va a ser el usuario
+- si hay error se remueve el token de las cookies
+- usamos un useEffect sin dependencia (se ejecuta solo cuando se recarga la pagina) y que ejecute esta funcion
