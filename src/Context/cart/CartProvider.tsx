@@ -6,21 +6,36 @@ import Cookie from "js-cookie"
 
 // No es lo mismo que en el CartContext, esta va a ser la interfaz del estado
 export interface CartState {
+  isLoaded: boolean,
   cart: ICartProduct[],
   numberOfItems: number;
   subTotal: number;
   taxRate: number;
   tax: number;
   total: number;
+  shippingAdress?: ShippingAdress
+}
+
+export interface ShippingAdress {
+  firstName: string;
+  lastName: string;
+  adress: string;
+  adress2?: string;
+  zip: string;
+  city: string;
+  country: string;
+  phone: string;
 }
 
 const CART_INITIAL_STATE: CartState = {
+  isLoaded: false,
   cart: [],
   numberOfItems: 0,
   subTotal: 0,
   taxRate: 0,
   tax: 0,
-  total: 0
+  total: 0,
+  shippingAdress: undefined
 }
 
 
@@ -29,6 +44,27 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
 
   // Como va a menejar el estado el provider
   const [state, dispatch] = useReducer(cartReducer, CART_INITIAL_STATE)
+
+  useEffect(() => {
+
+    // si no hay firstName significa que el resto no esta, entonces no se trae nada
+    if (Cookie.get("firstName")) {
+      const shippingAdress = {
+        firstName: Cookie.get("firstName") || "",
+        lastName: Cookie.get("lastName") || "",
+        adress: Cookie.get("adress") || "",
+        adress2: Cookie.get("adress2" || "") || "",
+        zip: Cookie.get("zip") || "",
+        city: Cookie.get("city") || "",
+        country: Cookie.get("country") || "",
+        phone: Cookie.get("phone") || "",
+      }
+      dispatch({ type: "[Cart] - Load adress from cookies", payload: shippingAdress })
+    }
+
+
+  }, [])
+
 
 
   // Asi era originalmente pero para que funcione asi hay que desactivar el strict mode
@@ -88,7 +124,7 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
       tax: subTotal * taxRate,
       total: subTotal * (taxRate + 1)
     }
-    dispatch({type:"[Cart] - Update order summary", payload:orderSummary})
+    dispatch({ type: "[Cart] - Update order summary", payload: orderSummary })
 
   }, [state.cart])
 

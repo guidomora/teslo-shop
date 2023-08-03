@@ -9,7 +9,7 @@ import { AuthContext } from "@/Context/auth/AuthContext"
 
 export const SideMenu = () => {
     const { isMenuOpen, toggleMenu } = useContext(UiContext)
-    const { user, isLoggedIn } = useContext(AuthContext)
+    const { user, isLoggedIn, logout } = useContext(AuthContext)
 
 
     // busqueda
@@ -26,6 +26,8 @@ export const SideMenu = () => {
         // reutilizamos la funcion
         navigateTo(`/search/${searchTerm}`)
     }
+
+
 
     return (
         <Drawer
@@ -90,13 +92,14 @@ export const SideMenu = () => {
                     </ListItemButton>
 
                     {isLoggedIn ?
-                        <ListItemButton >
+                        <ListItemButton onClick={logout}>
                             <ListItemIcon>
                                 <LoginOutlined />
                             </ListItemIcon>
                             <ListItemText primary={'Salir'} />
                         </ListItemButton>
-                        : <ListItemButton>
+                        // obtiene el path actual y lo agrega al que nos vamos a dirigir
+                        : <ListItemButton onClick={() => navigateTo(`/auth/login?p=${router.asPath}`)}> 
                             <ListItemIcon>
                                 <VpnKeyOutlined />
                             </ListItemIcon>

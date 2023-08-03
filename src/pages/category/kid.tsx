@@ -8,8 +8,7 @@ import { NextPage } from 'next'
 
 const KidsPage: NextPage = () => {
     const { products, isLoading } = useProducts('/products?gender=kid')
-
-
+  
 
   return (
     <ShopLayout title={'Teslo-kids'}

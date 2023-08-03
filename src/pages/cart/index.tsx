@@ -1,10 +1,26 @@
 import CartList from '@/Components/cart/CartList'
 import OrderSummary from '@/Components/cart/OrderSummary'
 import ShopLayout from '@/Components/layout/ShopLayout'
+import { CartContext } from '@/Context/cart/CartContext'
 import { Box, Button, Card, CardContent, Divider, Grid, Typography } from '@mui/material'
+import { useRouter } from 'next/router'
+import { useContext, useEffect } from 'react'
 
 const CartPage = () => {
 
+    const {isLoaded, cart} = useContext(CartContext)
+    const router = useRouter()
+
+    useEffect(() => {
+        if (isLoaded && cart.length === 0) {
+            router.replace("/cart/empty")
+        }
+    }, [isLoaded, cart, router])
+    
+
+    if (!isLoaded || cart.length === 0) {
+        return (<></>)
+    }
 
   return (
     <ShopLayout title='Carrito - 3' pageDescription={"Carrito de compras de la tienda"}>

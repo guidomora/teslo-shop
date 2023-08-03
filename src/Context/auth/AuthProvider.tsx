@@ -5,6 +5,7 @@ import { AuthReducer } from "./authReducer";
 import tesloApi from "@/api/tesloApi";
 import Cookies from "js-cookie";
 import axios from "axios";
+import { useRouter } from "next/router";
 
 // No es lo mismo que en el NameContext, esta va a ser la interfaz del estado
 export interface AuthState {
@@ -24,6 +25,7 @@ const AuthProvider: FC<AuthState> = ({ children }) => {
 
     // Como va a menejar el estado el provider
     const [state, dispatch] = useReducer(AuthReducer, AUTH_INITIAL_STATE)
+    const router = useRouter()
 
 
     useEffect(() => {
@@ -86,11 +88,18 @@ const AuthProvider: FC<AuthState> = ({ children }) => {
         }
     }
 
+    const logout = () => {
+        Cookies.remove("token")
+        Cookies.remove("cart")
+        router.reload() // hace un refresh
+    }
+
     return (
         <AuthContext.Provider value={{
             ...state,
             loginUser,
-            registerUser
+            registerUser,
+            logout
         }}>
             {children}
         </AuthContext.Provider>

@@ -8,29 +8,35 @@ type Data =
     | IProduct
 
 
-export default function (req: NextApiRequest, res: NextApiResponse<Data>) {
-
-    switch (req.method) {
-        case "GET":
-            return getProductBySlug(req, res)
-
-        default:
-            return res.status(400).json({
-                message: "Bad request"
-            })
-    }
-}
-
-const getProductBySlug = async (req: NextApiRequest, res: NextApiResponse<any>) => {
+    export default function handler(req: NextApiRequest, res: NextApiResponse<Data>) {
     
-    await connect()
-    const { slug } = req.query
-    const product = await Product.findOne({ slug }).lean()
-    await disconnect()
-
-    if (!product) {
-        return res.status(404).json({ message: 'Producto no encontrado' })
+    
+        switch( req.method ) {
+            case 'GET':
+                return getProductBySlug(req, res);
+    
+            default:
+                return res.status(400).json({
+                    message: 'Bad request'
+                })
+        }
+    
     }
-
-    return res.json(product)
-}
+    
+    async function getProductBySlug(req: NextApiRequest, res: NextApiResponse<Data>) {
+    
+        await connect();
+        const { slug } = req.query;
+        const product = await Product.findOne({ slug }).lean();
+        await disconnect();
+    
+        if( !product ) {
+            return res.status(404).json({
+                message: 'Producto no encontrado'
+            })
+        }
+    
+        return res.json( product );
+    
+    
+    }

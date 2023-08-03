@@ -36,7 +36,7 @@ const ProductPage: NextPage<Props> = ({ product }) => {
     slug: product.slug,
     title: product.title,
     gender: product.gender,
-    quantity: 1
+    quantity: 1,
   })
 
   const selectedSize = (size: ISize) => {

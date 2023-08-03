@@ -154,3 +154,40 @@
 - despachamos el login y el payload va a ser el usuario
 - si hay error se remueve el token de las cookies
 - usamos un useEffect sin dependencia (se ejecuta solo cuando se recarga la pagina) y que ejecute esta funcion
+
+16) Logout y redireccion a la ultima pagina vista:
+- AuthProvider creamos la funcion logout, borra el token, el carrito y hace un refresh de la pagina para actualizar el estado
+- AuthContext: especificamos el tipo de la funcion logout
+- SideMenu.tsx: traemos la logout del context en el boton de salir 
+- login.tsx: en la funcion onLoginUser creamos una constante que del router va a obtener el parametro,
+  lo pasa a string y si no tiene nada va a ser "/"
+- esta constante se la pasamos al router.replace
+- en el boton de ingresar usamos onNavigateTo, pasamos la ruta del login pero le agregamos el path que vamos a tener
+  guardado en el router
+ 
+17) Mantener el query parameter depues de crear un usuario:
+- proceso similar al de arriba, solo que no usamos context y en vez de usar router.asPath
+  usamos router.query.p
+
+18)Mostrar poagiona de carrito vacio:
+- CartContext: agregamos la propiedad isLoaded de tipo boolean
+- CartProvider: hacemos lo mismo y tambien la agregamos en el estado con false como valor inicial
+- cartReducer: En la primer accion que carga el carrito de las cookies el isLoaded va a ser true
+- pages > cart > index.tsx creamos un useEffect que verifica el isLoaded y el cart.length del context
+  y reemplaza la ruta por la del carrito vacio 
+- creamos un condicional que retorna un fragmento vacio para que no se vea la pagina del carrito 
+
+19) Verificar autenticacion con server side: Si no estas autenticado la pagina adress te devuelve al login
+- utils > jwt.ts dentro de la funcion isValidToken agregamos un condicional para que si el token
+  es menor a 10 caracteres rechace la promesa
+- pages > checkout > adress.tsx usamos staticProps obtenemos el token, se lo pasamos a la funcion isValidToken
+  si es valido retorna un true
+- si el token no es valido te redirecciona al login
+
+20) middleware de autenticacion:
+
+21) Datos de la direccion: 
+adres.tsx: usamos React hook Form para manejar el formulario de la direccion
+
+22) Recargar direccion de la persona:
+ANOTARRRRRR

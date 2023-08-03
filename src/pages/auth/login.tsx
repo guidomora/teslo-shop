@@ -32,9 +32,12 @@ const LoginPage = () => {
             }, 3000);
             return;
         }
-        router.replace("/"); // el replace hace que el usuario no pueda volver a la pagina anterior
+        const destination = router.query.p?.toString() ||"/" //si el argumento no viene redireccionamos a la pagina de inicio
+        router.replace(destination); // el replace hace que el usuario no pueda volver a la pagina anterior
     }
 
+
+    
     return (
         <AuthLayout title='Ingresar'>
             <form onSubmit={handleSubmit(onLoginUser)} noValidate>
@@ -79,7 +82,7 @@ const LoginPage = () => {
                             </Button>
                         </Grid>
                         <Grid item xs={12} display={'flex'} justifyContent={"end"}>
-                            <NextLink legacyBehavior passHref href="/auth/register">
+                            <NextLink legacyBehavior passHref href={`/auth/register?p=${router.query.p?.toString()}`}>
                                 <Link underline="always">
                                     ¿No tienes cuenta?
                                 </Link>
