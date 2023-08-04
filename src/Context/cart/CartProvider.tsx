@@ -161,12 +161,25 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     dispatch({ type: "[Cart] - Remove product in cart", payload: product })
   }
 
+  const updateAdress = (adress: ShippingAdress) => {
+        Cookie.set("firstName", adress.firstName)
+        Cookie.set("lastName", adress.lastName)
+        Cookie.set("adress", adress.adress)
+        Cookie.set("adress2", adress.adress2 || "")
+        Cookie.set("zip", adress.zip)
+        Cookie.set("city", adress.city)
+        Cookie.set("country", adress.country)
+        Cookie.set("phone", adress.phone)
+    dispatch({type:"[Cart] - Update adress", payload:adress})
+  }
+
   return (
     <CartContext.Provider value={{
       ...state,
       addProductToCart,
       updateCartQuantity,
-      removeCartProduct
+      removeCartProduct,
+      updateAdress
     }}>
       {children}
     </CartContext.Provider>

@@ -187,7 +187,23 @@
 20) middleware de autenticacion:
 
 21) Datos de la direccion: 
-adres.tsx: usamos React hook Form para manejar el formulario de la direccion
+- adress.tsx: usamos React hook Form para manejar el formulario de la direccion
+- creamos la funcion onSubmitAdress que va a setear en las cookies todos los datos del formulario
 
 22) Recargar direccion de la persona:
-ANOTARRRRRR
+- CartProvider: creamos la interface ShippingAdress que va a determinar el tipo de todos los datos
+  del formulario y agregamos shippingAdress undefinded al state 
+- CartContext: agregamos ShippingAdress que va a ser de tipo ShippingAdress (provider interface) pero opcional
+- cartReducer: en los actionType creamos la nueva accion y el payload va a ser de tipo ShippingAdress, 
+  creamos la accion nueva donde el shippingAdress va a ser el action.payload
+- creamos un useEffect que va a tener un condicional en el que si puede obtener el "firstName" de las cookies
+  significaque el resto de los datos estan y los va a traer
+- se despacha la accion creada y el payload va a ser todos los datos traidos de las cookies
+
+23) Actualizar la direccion del contenido: Actualizamos el codigo para que se vea mas limpio
+- cartReducer: creamos un nuevo actionType va a ser identico al de arriba solo que le cambiamos el nombre
+- la accion usamos la misma
+- CartProvider: creamos la funcion updateAdress, recibe adress, pegamos las lineas de codigo que estaban
+  en adress.tsx en la funcion de onSubmitAdress que seteaban los datos en las cookies y despachamos la accion creada
+- adress.tsx: a la funcion onSubmitAdress le agregamos la funcion updateAdress importada del context y le pasamos la data
+- esto funciona igual que antes pero hace que se vea todo mas limpio

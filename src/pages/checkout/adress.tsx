@@ -1,12 +1,13 @@
 import ShopLayout from '@/Components/layout/ShopLayout'
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
-import React from 'react'
+import React, { useContext } from 'react'
 import { GetServerSideProps } from 'next'
 import { isValidToken } from '../../utils/jwt';
 import { countries } from '@/utils/countries';
 import { useForm } from 'react-hook-form';
 import Cookies from 'js-cookie';
 import { useRouter } from 'next/router';
+import { CartContext } from '@/Context/cart/CartContext';
 
 type FormData = {
     firstName: string;
@@ -33,24 +34,15 @@ const getAdressFromCookies = ():FormData => {
 }
 
 const adress = () => {
+    const {updateAdress} = useContext(CartContext)
     const router = useRouter()
     const { register, handleSubmit, formState: { errors }, } = useForm<FormData>({
         defaultValues: getAdressFromCookies()
-
-
     })
 
 
     const onSubmitAdress = (data: FormData) => {
-
-        Cookies.set("firstName", data.firstName)
-        Cookies.set("lastName", data.lastName)
-        Cookies.set("adress", data.adress)
-        Cookies.set("adress2", data.adress2 || "")
-        Cookies.set("zip", data.zip)
-        Cookies.set("city", data.city)
-        Cookies.set("country", data.country)
-        Cookies.set("phone", data.phone)
+        updateAdress(data)
         router.push("/checkout/summary")
     }
 
@@ -149,7 +141,7 @@ const adress = () => {
                                 variant='filled'
                                 label="País"
                                 type="country"
-                                defaultValue={countries[0].code}
+                                defaultValue={Cookies.get("country") || countries[0].code}
                                 {...register("country", {
                                     required: "Este campo es requerido",
                                 })}
