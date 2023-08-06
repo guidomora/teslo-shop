@@ -6,7 +6,7 @@ import tesloApi from "@/api/tesloApi";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter } from "next/router";
-import { useSession } from "next-auth/react";
+import { signOut, useSession } from "next-auth/react";
 
 // No es lo mismo que en el NameContext, esta va a ser la interfaz del estado
 export interface AuthState {
@@ -36,7 +36,7 @@ const AuthProvider: FC<AuthState> = ({ children }) => {
         if (status === "authenticated") {
             console.log({user: data?.user});
             
-            //dispatch({type:"[Auth] - Login", payload:data?.user as IUser})
+            dispatch({type:"[Auth] - Login", payload:data?.user as IUser})
         }
 
     }, [status, data])
@@ -114,7 +114,9 @@ const AuthProvider: FC<AuthState> = ({ children }) => {
         Cookies.remove("city")
         Cookies.remove("country")
         Cookies.remove("phone")
-        router.reload() // hace un refresh
+
+        signOut()
+        //router.reload() // hace un refresh
     }
 
     return (

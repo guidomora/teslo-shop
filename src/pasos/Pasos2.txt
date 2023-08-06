@@ -232,3 +232,39 @@
 
 26) Credentials:
 - [...nextauth].ts: usamos el provider Credentials, que sirve para crear nuestra propia autenticacion
+
+27) Callbacks:
+- [...nextauth].ts creamos una prpoiedad que se llama callbacks 
+- dentro de callbacks tenemos creamos las funciones jwt (retorna el token) y session (retrna la session)
+
+28) Verificar correo y contraseña:
+- database > dbUsers.ts creamos la funcion checkUserEmailPassword para verificar que el usurio exista
+  en nuestra base de datos
+- si existe retorna todos los datos de usuario
+- [...nextauth].ts llamamos esta funcion y le pasamos el email y la password que estan dentro de las credenciales
+
+29) signout:
+- AuthProvider.tsx: en la funcion de logout llamamos al metodo de signout propio de nextAuth
+
+30) Crear usuario basado en oauth:
+- dbUsers.ts: creamos una funcion que al registrarse con una red social si el usuario no esta creado 
+  lo crea con los datos de la red social
+- recibe el mail y la password, lo busca en nuestra db. Si lo encuentra trae los datos y listo
+- si no lo encuentra crea uno y por defecto lo pone como cliente y luego retorna sus datos
+
+31) Login personalizado:
+- pages > auth > login.tsx: en la funcion onLoginUser comentamos todo menos el setShowError,ya que lo anterior
+  era para el login que habia creado nosotros
+- solamente tenemos que agregar el metodo signIn de next auth, al cual le tenemos que pasar el provider que usamos
+  para iniciar sesion y el mail y contraseña
+- como todo va a traves de nuestras cookies, para saber si estamos autenticados ono vamos a ener que usar server side props
+- de esta desestructuramos la request y la query
+- creamos una constante session la cual llama getSession ue es de next auth y le mandamos la request
+- si la session es correcta redirigimos a la query 
+- [...nextauth].ts: agregamos la propiedad pages, para indicar que vamos a usar nuestras paginas para el login
+  y el registro
+
+  32) Especificar duracion de la sesion:
+  - [...nextauth].ts: agregamos la propiedad session y definimos la duracion, estrategia y actualizacion
+  - pages > auth > register.tsx hacemos e mismo proceso que hicimos en el login para empezar a usar nextAuth
+    en el registro

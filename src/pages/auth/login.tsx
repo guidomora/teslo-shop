@@ -1,3 +1,4 @@
+import { GetServerSideProps } from 'next'
 import AuthLayout from '@/Components/layout/AuthLayout'
 import React, { useContext, useState } from 'react'
 import { Box, Grid, Typography, TextField, Button, Link, Chip } from '@mui/material';
@@ -8,6 +9,7 @@ import { ErrorOutline } from '@mui/icons-material';
 import tesloApi from '@/api/tesloApi';
 import { AuthContext } from '@/Context/auth/AuthContext';
 import { useRouter } from 'next/router';
+import { getSession, signIn } from 'next-auth/react';
 
 type FormData = {
     email: string
@@ -23,21 +25,25 @@ const LoginPage = () => {
     const onLoginUser = async ({ email, password }: FormData) => {
         setShowError(false)
 
-        const isValidLogin = await loginUser(email, password)
+        // Le tenemos que pasar los providers que utilizamos
+        await signIn("credentials", { email, password })
 
-        if (!isValidLogin) {
-            setShowError(true)
-            setTimeout(() => {
-                setShowError(false)
-            }, 3000);
-            return;
-        }
-        const destination = router.query.p?.toString() ||"/" //si el argumento no viene redireccionamos a la pagina de inicio
-        router.replace(destination); // el replace hace que el usuario no pueda volver a la pagina anterior
+        // Autenticacion personalizada sin NextAuth
+        // const isValidLogin = await loginUser(email, password)
+
+        // if (!isValidLogin) {
+        //     setShowError(true)
+        //     setTimeout(() => {
+        //         setShowError(false)
+        //     }, 3000);
+        //     return;
+        // }
+        // const destination = router.query.p?.toString() ||"/" //si el argumento no viene redireccionamos a la pagina de inicio
+        // router.replace(destination); // el replace hace que el usuario no pueda volver a la pagina anterior
     }
 
 
-    
+
     return (
         <AuthLayout title='Ingresar'>
             <form onSubmit={handleSubmit(onLoginUser)} noValidate>
@@ -93,6 +99,30 @@ const LoginPage = () => {
             </form>
         </AuthLayout>
     )
+}
+
+// You should use getServerSideProps when:
+// - Only if you need to pre-render a page whose data must be fetched at request time
+
+export const getServerSideProps: GetServerSideProps = async ({ req, query }) => {
+    const session = await getSession({ req })
+
+    const { p = "/" } = query // si no hay query nos manda al inicio
+
+    if (session) {
+        return {
+            redirect: {
+                destination: p.toString(),
+                permanent: false
+            }
+        }
+    }
+
+    return {
+        props: {
+
+        }
+    }
 }
 
 export default LoginPage
