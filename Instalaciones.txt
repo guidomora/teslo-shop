@@ -13,3 +13,4 @@ npm i jsonwebtoken
 npm i --save-dev @types/jsonwebtoken
 npm install react-hook-form
 npm i axios
+npm install next-auth

@@ -207,3 +207,28 @@
   en adress.tsx en la funcion de onSubmitAdress que seteaban los datos en las cookies y despachamos la accion creada
 - adress.tsx: a la funcion onSubmitAdress le agregamos la funcion updateAdress importada del context y le pasamos la data
 - esto funciona igual que antes pero hace que se vea todo mas limpio
+
+------------------------------- Instalacion de nextAuth-------------------------------
+- api/aut/[...nextauth].ts el archivo tiene que tener ese formato porque significa que cualquier peticion va a entrar por ese archivo
+  sin importar lo que se solicite
+
+  ---------------------------------------------------------------------------------------------
+
+24) Configuracion NextAuth + github:
+- creamos la ruta mencionada arriba
+- el la pagina de NextAuth vamos a Providers > github vamos al link donde nos dice que configuremos una app
+- nos manda a la pag de githu, le damos a new github app, rellenamos todo el formulario y la creamos
+- en [...nextauth].ts escribimos el codigo (copiado de la docu de NextAuth)
+- .env agregamos las variables de entorno que nos pide GITHUB_ID: ponemos nuestro client ID (lo vemos cuando creamos la app)
+  GITHUB_SECRET: en la configuracion de la app en github tenemos que generar esta clave y la pegamos
+- ahora cuando vayamos a api/auth/signin nos aparecera el boton para iniciar sesion con github y una vez autenticados
+  nos manda automaticamente al inicio
+
+25) Obtener informacion de la sesion:
+- NextAuth tiene un Provider el cual lo ponemos en el punto mas alto de la app, envuelve todo
+- AuthProvider: llamamos al hook useSession de nextAuth del cual vamos a obtener el status y la data
+- comentamos el useEffect que teniamos antes para que chequee el token y creamos uno nuevo
+  en el cual va a verificar si el status es igual a authenticaded, nos muestre la data del usuario
+
+26) Credentials:
+- [...nextauth].ts: usamos el provider Credentials, que sirve para crear nuestra propia autenticacion

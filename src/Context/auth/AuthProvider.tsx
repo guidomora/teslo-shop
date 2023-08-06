@@ -6,6 +6,7 @@ import tesloApi from "@/api/tesloApi";
 import Cookies from "js-cookie";
 import axios from "axios";
 import { useRouter } from "next/router";
+import { useSession } from "next-auth/react";
 
 // No es lo mismo que en el NameContext, esta va a ser la interfaz del estado
 export interface AuthState {
@@ -22,15 +23,29 @@ const AUTH_INITIAL_STATE: AuthState = {
 
 // Creamos el provider
 const AuthProvider: FC<AuthState> = ({ children }) => {
+    const {data, status} = useSession()
+    
+    
+
 
     // Como va a menejar el estado el provider
     const [state, dispatch] = useReducer(AuthReducer, AUTH_INITIAL_STATE)
     const router = useRouter()
 
-
     useEffect(() => {
-        checkToken()
-    }, [])
+        if (status === "authenticated") {
+            console.log({user: data?.user});
+            
+            //dispatch({type:"[Auth] - Login", payload:data?.user as IUser})
+        }
+
+    }, [status, data])
+    
+
+
+    // useEffect(() => {
+    //     checkToken()
+    // }, [])
 
     const checkToken = async () => {
 
@@ -91,6 +106,14 @@ const AuthProvider: FC<AuthState> = ({ children }) => {
     const logout = () => {
         Cookies.remove("token")
         Cookies.remove("cart")
+        Cookies.remove("firstName")
+        Cookies.remove("lastName")
+        Cookies.remove("adress")
+        Cookies.remove("adress2")
+        Cookies.remove("zip")
+        Cookies.remove("city")
+        Cookies.remove("country")
+        Cookies.remove("phone")
         router.reload() // hace un refresh
     }
 
