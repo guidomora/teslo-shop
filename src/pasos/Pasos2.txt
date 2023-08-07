@@ -276,4 +276,5 @@
     los providers
   - seteamos los providers al estado
   - los mapeamos en un boton y para que se ejecuten en el onclick tenemos que llamar a signIn y pasarle el id del provider
+
   
