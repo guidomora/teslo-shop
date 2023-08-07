@@ -2,21 +2,32 @@ import CartList from '@/Components/cart/CartList'
 import OrderSummary from '@/Components/cart/OrderSummary'
 import ShopLayout from '@/Components/layout/ShopLayout'
 import { Box, Button, Card, CardContent, Divider, Grid, Link, Typography } from '@mui/material'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import NextLink from "next/link"
 import { CartContext } from '@/Context/cart/CartContext'
 import { countries } from '@/utils/countries'
+import Cookies from 'js-cookie'
+import { useRouter } from 'next/router'
 
 
 const SumaryPage = () => {
     const {shippingAdress, numberOfItems} = useContext(CartContext)
+    const router = useRouter()
+    
 
-    const countryName = countries.find(c => c.code === shippingAdress?.country)?.name
+
+    useEffect(() => {
+      if (!Cookies.get("firstName")) {
+        router.push("/checkout/adress")
+      }
+    }, [router])
+    
 
     if (!shippingAdress) {
         <></>
     }
-
+    
+    
   return (
     <ShopLayout title='Resumen de orden' pageDescription={"Resumen de orden"}>
         <Typography variant='h1' component="h1">Resumen de orden</Typography>
@@ -43,7 +54,7 @@ const SumaryPage = () => {
                         { shippingAdress?.adress2?.length === undefined  ? <Typography>{shippingAdress?.adress2}</Typography> : null}
                         <Typography>{shippingAdress?.city}</Typography>
                         <Typography>{shippingAdress?.zip}</Typography>
-                        <Typography>{countryName}</Typography>
+                        <Typography>{shippingAdress?.country}</Typography>
                         <Typography>+{shippingAdress?.phone}</Typography>
                         <Divider sx={{my:1}} />
                         <Box display={'flex'} justifyContent={"end"}>

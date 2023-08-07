@@ -1,15 +1,13 @@
 import { GetServerSideProps } from 'next'
 import AuthLayout from '@/Components/layout/AuthLayout'
-import React, { useContext, useState } from 'react'
-import { Box, Grid, Typography, TextField, Button, Link, Chip } from '@mui/material';
+import React, { useEffect, useState } from 'react'
+import { Box, Grid, Typography, TextField, Button, Link, Chip, Divider } from '@mui/material';
 import NextLink from "next/link"
 import { useForm } from 'react-hook-form';
 import { isEmail } from '@/utils/validations';
 import { ErrorOutline } from '@mui/icons-material';
-import tesloApi from '@/api/tesloApi';
-import { AuthContext } from '@/Context/auth/AuthContext';
 import { useRouter } from 'next/router';
-import { getSession, signIn } from 'next-auth/react';
+import { getProviders, getSession, signIn } from 'next-auth/react';
 
 type FormData = {
     email: string
@@ -19,8 +17,16 @@ type FormData = {
 const LoginPage = () => {
     const { register, handleSubmit, formState: { errors }, } = useForm<FormData>()
     const [showError, setShowError] = useState(false)
-    const { loginUser } = useContext(AuthContext)
     const router = useRouter()
+    const [providers, setProviders] = useState<any>({}) // le ponemos any porque si le queremos poner el verdadero tipo es un quilombo
+
+    useEffect(() => {
+        // promesa propia de next auth
+        getProviders().then(prov => { // podemos acceder a los providers para iniciar sesion
+            setProviders(prov)
+        })
+    }, [])
+    
 
     const onLoginUser = async ({ email, password }: FormData) => {
         setShowError(false)
@@ -93,6 +99,27 @@ const LoginPage = () => {
                                     ¿No tienes cuenta?
                                 </Link>
                             </NextLink>
+                        </Grid>
+                        <Grid item xs={12}>
+                            <Divider sx={{width:"100%", mb:2}} />
+                            {/* con esta funcion, se obtienen de un objeto todos sus valores */}
+                            {Object.values(providers).map((provider:any) => {
+                                if (provider.id === "credentials") {
+                                    return <div key={"crecentials"}></div>
+                                }
+                                return(
+                                    <Button
+                                    key={provider.id}
+                                    variant='outlined'
+                                    fullWidth
+                                    color='primary'
+                                    sx={{mb:1}}
+                                    onClick={() => signIn(provider.id)}
+                                    >
+                                    {provider.name}
+                                    </Button>
+                                )
+                            })}
                         </Grid>
                     </Grid>
                 </Box>

@@ -47,5 +47,4 @@ export const oAUthToDbUser = async( oAuthEmail: string, oAuthName: string ) => {
 
     const { _id, name, email, role } = newUser;
     return { _id, name, email, role };
-
 }

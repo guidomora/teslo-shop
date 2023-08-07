@@ -1,6 +1,6 @@
 import ShopLayout from '@/Components/layout/ShopLayout'
 import { Box, Button, FormControl, Grid, InputLabel, MenuItem, Select, TextField, Typography } from '@mui/material'
-import React, { useContext } from 'react'
+import React, { useContext, useEffect } from 'react'
 import { GetServerSideProps } from 'next'
 import { isValidToken } from '../../utils/jwt';
 import { countries } from '@/utils/countries';
@@ -33,13 +33,26 @@ const getAdressFromCookies = ():FormData => {
     }
 }
 
-const adress = () => {
+const AdressPage = () => {
     const {updateAdress} = useContext(CartContext)
     const router = useRouter()
-    const { register, handleSubmit, formState: { errors }, } = useForm<FormData>({
-        defaultValues: getAdressFromCookies()
+    const { register, handleSubmit, formState: { errors }, reset } = useForm<FormData>({
+        defaultValues: {
+            firstName:"",
+            lastName:"",
+            adress:"",
+            adress2:"",
+            zip:"",
+            city:"",
+            country:countries[0].code,
+            phone:"",
+        }
     })
 
+    useEffect(() => {
+        reset(getAdressFromCookies())
+    }, [reset])
+    
 
     const onSubmitAdress = (data: FormData) => {
         updateAdress(data)
@@ -135,9 +148,9 @@ const adress = () => {
                         />
                     </Grid>
                     <Grid item xs={12} sm={6}>
-                        <FormControl fullWidth>
+                        
                             <TextField
-                                select
+                                fullWidth
                                 variant='filled'
                                 label="País"
                                 type="country"
@@ -146,15 +159,14 @@ const adress = () => {
                                     required: "Este campo es requerido",
                                 })}
                                 error={!!errors.country}
-                            // helperText={errors.country?.message}
+                             helperText={errors.country?.message}
 
                             >
-                                {countries.map(country => (
+                                {/* {countries.map(country => (
                                     <MenuItem key={country.code}
                                         value={country.code}>{country.name}</MenuItem>
-                                ))}
+                                ))} */}
                             </TextField>
-                        </FormControl>
                     </Grid>
                     <Grid item xs={12} sm={6}>
                         <TextField
@@ -187,35 +199,35 @@ const adress = () => {
 
 
 
-export const getServerSideProps: GetServerSideProps = async ({ req }) => {
+// export const getServerSideProps: GetServerSideProps = async ({ req }) => {
 
-    const { token = "" } = req.cookies
-    let isValidTokenn = false
+//     const { token = "" } = req.cookies
+//     let isValidTokenn = false
 
-    try {
-        await isValidToken(token)
-        isValidTokenn = true
-    } catch (error) {
-        isValidTokenn = false
-    }
+//     try {
+//         await isValidToken(token)
+//         isValidTokenn = true
+//     } catch (error) {
+//         isValidTokenn = false
+//     }
 
-    if (!isValidTokenn) {
-        return {
-            redirect: {
-                destination: "/auth/login?p=/checkout/adress",
-                permanent: false
-            }
-        }
-    }
+//     if (!isValidTokenn) {
+//         return {
+//             redirect: {
+//                 destination: "/auth/login?p=/checkout/adress",
+//                 permanent: false
+//             }
+//         }
+//     }
 
-    return {
-        props: {
+//     return {
+//         props: {
 
-        }
-    }
-}
-
-
+//         }
+//     }
+// }
 
 
-export default adress
+
+
+export default AdressPage

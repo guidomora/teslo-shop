@@ -268,3 +268,12 @@
   - [...nextauth].ts: agregamos la propiedad session y definimos la duracion, estrategia y actualizacion
   - pages > auth > register.tsx hacemos e mismo proceso que hicimos en el login para empezar a usar nextAuth
     en el registro
+
+  33) Proveedores en nuestro login:
+  - login.tsx: creamos un useState el cual va a ser un objeto de tipo any porque especificar el tipo
+    va a ser un dolor de cabeza
+  - creamos un useEffect en el cual llamamos a getProviders() que es una promesa de nextAuth que nos va a traer
+    los providers
+  - seteamos los providers al estado
+  - los mapeamos en un boton y para que se ejecuten en el onclick tenemos que llamar a signIn y pasarle el id del provider
+  
