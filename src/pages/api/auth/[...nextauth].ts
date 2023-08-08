@@ -1,12 +1,12 @@
-import NextAuth, { Awaitable, RequestInternal, User } from "next-auth"
+import NextAuth, { NextAuthOptions } from "next-auth"
 import Credentials from "next-auth/providers/credentials"
 import GitHubProvider from "next-auth/providers/github"
 import { checkUserEmailPassword, oAUthToDbUser } from '../../../../database/dbUsers';
-import { signIn } from 'next-auth/react';
 
 
 
-export const authOptions = {
+
+export const authOptions:NextAuthOptions = {
     // Configure one or more authentication providers
     providers: [
         GitHubProvider({
@@ -22,9 +22,7 @@ export const authOptions = {
                 password: { label: "Contraseña", type: "password", placeholder: "Contraseña" },
             },
             async authorize(credentials) {
-                console.log({ credentials });
-
-                return await checkUserEmailPassword(credentials!.email, credentials!.password)
+                return await checkUserEmailPassword(credentials!.email, credentials!.password) as any
             }
         })
 

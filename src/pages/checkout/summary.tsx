@@ -11,7 +11,7 @@ import { useRouter } from 'next/router'
 
 
 const SumaryPage = () => {
-    const {shippingAdress, numberOfItems} = useContext(CartContext)
+    const {shippingAdress, numberOfItems, createOrder} = useContext(CartContext)
     const router = useRouter()
     
 
@@ -27,7 +27,10 @@ const SumaryPage = () => {
         <></>
     }
     
-    
+    const onCreateOrder = () => {
+        createOrder()
+    }
+
   return (
     <ShopLayout title='Resumen de orden' pageDescription={"Resumen de orden"}>
         <Typography variant='h1' component="h1">Resumen de orden</Typography>
@@ -66,7 +69,11 @@ const SumaryPage = () => {
                         </Box>
                         <OrderSummary />
                         <Box sx={{mt:3}}>
-                            <Button color='secondary' className='circular-btn' fullWidth>
+                            <Button 
+                            color='secondary' 
+                            className='circular-btn' 
+                            fullWidth
+                            onClick={onCreateOrder}>
                                 CheckOut
                             </Button>
                         </Box>

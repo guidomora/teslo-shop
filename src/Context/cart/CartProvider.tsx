@@ -3,6 +3,8 @@ import { CartContext } from "./CartContext";
 import { cartReducer } from "./cartReducer";
 import { ICartProduct } from "@/Interfaces/cart";
 import Cookie from "js-cookie"
+import { ShippingAdress } from "@/Interfaces/order";
+import tesloApi from "@/api/tesloApi";
 
 // No es lo mismo que en el CartContext, esta va a ser la interfaz del estado
 export interface CartState {
@@ -16,16 +18,7 @@ export interface CartState {
   shippingAdress?: ShippingAdress
 }
 
-export interface ShippingAdress {
-  firstName: string;
-  lastName: string;
-  adress: string;
-  adress2?: string;
-  zip: string;
-  city: string;
-  country: string;
-  phone: string;
-}
+
 
 const CART_INITIAL_STATE: CartState = {
   isLoaded: false,
@@ -173,13 +166,25 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
     dispatch({type:"[Cart] - Update adress", payload:adress})
   }
 
+  const createOrder = async() => {
+    try {
+      const {data} = await tesloApi.post("/orders")
+      console.log(data);
+      
+    } catch (error) {
+      console.log(error);
+      
+    }
+  }
+
   return (
     <CartContext.Provider value={{
       ...state,
       addProductToCart,
       updateCartQuantity,
       removeCartProduct,
-      updateAdress
+      updateAdress,
+      createOrder
     }}>
       {children}
     </CartContext.Provider>
