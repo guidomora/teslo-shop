@@ -13,3 +13,7 @@ Manejo y creacion de ordenes:
 - CartContext.ts: definimos la funcion creada (luego cambia la definicion)
 - summary.tsx: hacemos que al darle click al boton del checkout se ejecute la funcion
 - pages > api > orders > index.ts creamos el endpoint momentaneamente para que devuelva un mensaje
+
+  4) body:
+  - CartProvider: en la funcion createOrder agregamos una validacion
+  - creamos el body
