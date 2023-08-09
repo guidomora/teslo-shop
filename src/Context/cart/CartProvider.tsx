@@ -3,7 +3,7 @@ import { CartContext } from "./CartContext";
 import { cartReducer } from "./cartReducer";
 import { ICartProduct } from "@/Interfaces/cart";
 import Cookie from "js-cookie"
-import { ShippingAdress } from "@/Interfaces/order";
+import { IOrder, ShippingAdress } from "@/Interfaces/order";
 import tesloApi from "@/api/tesloApi";
 
 // No es lo mismo que en el CartContext, esta va a ser la interfaz del estado
@@ -167,8 +167,26 @@ const CartProvider: FC<PropsWithChildren> = ({ children }) => {
   }
 
   const createOrder = async() => {
+
+    if (!state.shippingAdress) {
+      throw new Error("No hay direccion de entrega")
+    }
+
+    const body: IOrder = {
+      orderItems: state.cart.map(p => ({
+        ...p,
+        size: p.size!
+      })),
+      shippingAdress: state.shippingAdress,
+      numberOfItems:state.numberOfItems,
+      subTotal: state.subTotal,
+      tax: state.tax,
+      total: state.total,
+      isPaid: false
+    }
+
     try {
-      const {data} = await tesloApi.post("/orders")
+      const {data} = await tesloApi.post("/orders", body)
       console.log(data);
       
     } catch (error) {

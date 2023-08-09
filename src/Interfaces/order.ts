@@ -1,3 +1,4 @@
+import { ISize } from "./products";
 import { IUser } from "./user";
 
 export interface IOrder {
@@ -16,6 +17,17 @@ export interface IOrder {
     paidAt?: string
 }
 
+export interface IOrderItem {
+    _id      : string;
+    title    : string;
+    size     : ISize;
+    quantity : number;
+    slug     : string;
+    image    : string;
+    price    : number;
+    gender   : string;
+}
+
 export interface ShippingAdress {
     firstName: string;
     lastName: string;
@@ -26,13 +38,3 @@ export interface ShippingAdress {
     country: string;
     phone: string;
   }
-
-export interface IOrderItem {
-    _id: string;
-    title: string;
-    size: string;
-    quantity: number;
-    slug: string;
-    image: string;
-    price: number
-}
