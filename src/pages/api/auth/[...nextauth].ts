@@ -60,12 +60,14 @@ export const authOptions:NextAuthOptions = {
             return token
         },
 
-        async session({ session, token, user }: any) { // regresar una session
+        async session({ session, token, user }: any){
+            // console.log({ session, token, user });
+      
             session.accessToken = token.accessToken;
             session.user = token.user as any;
-
+      
             return session;
-        }
+          }
     }
 }
 
